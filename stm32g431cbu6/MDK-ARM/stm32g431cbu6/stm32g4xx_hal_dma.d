@@ -24,10 +24,6 @@ stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx
 stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h
 stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h
 stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h
-stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_comp.h
-stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h
-stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac.h
-stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h
 stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h
 stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h
 stm32g431cbu6\stm32g4xx_hal_dma.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h

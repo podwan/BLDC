@@ -21,22 +21,28 @@ Target DLL:      CMSIS_AGDI.dll V1.33.0.0
 Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
-C:\Users\18575\Desktop\BLDC\Î¢Î¢¿Î\stm32g431cbu6\MDK-ARM\stm32g431cbu6.uvprojx
-Project File Date:  12/16/2023
+C:\Users\18575\Desktop\bldc\stm32g431cbu6\MDK-ARM\stm32g431cbu6.uvprojx
+Project File Date:  12/19/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'stm32g431cbu6'
+compiling main.c...
+..\User\foc.h(24): warning:  #1-D: last line of file ends without a newline
+  		
+../Core/Src/main.c(153): warning:  #177-D: variable "counter"  was declared but never referenced
+    int counter = 0;
+../Core/Src/main.c(154): warning:  #177-D: variable "message"  was declared but never referenced
+    char message[20];
+../Core/Src/main.c: 3 warnings, 0 errors
 compiling foc.c...
-../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h(51): warning:  #47-D: incompatible redefinition of macro "__FPU_PRESENT" 
-  #define __FPU_PRESENT             1U       /*!< FPU present                                   */
-..\User\foc.h(14): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\foc.c: 2 warnings, 0 errors
+..\User\foc.h(24): warning:  #1-D: last line of file ends without a newline
+  		
+..\User\foc.c: 1 warning, 0 errors
 linking...
-Program Size: Code=20868 RO-data=568 RW-data=48 ZI-data=2048  
+Program Size: Code=23356 RO-data=2628 RW-data=68 ZI-data=2092  
 FromELF: creating hex file...
-"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 2 Warning(s).
+"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 

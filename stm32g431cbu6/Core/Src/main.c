@@ -19,8 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "comp.h"
-#include "dac.h"
 #include "dma.h"
 #include "opamp.h"
 #include "tim.h"
@@ -31,7 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <string.h>
-
+#include "foc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,7 +54,6 @@ uint8_t ADC_offset = 0;
 float temp[5];
 static uint8_t tempData[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x80, 0x7F};
 
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -78,7 +75,21 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+char data[] = "😂😂😂😂😂😂😂😊😊";
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim == &htim6)
+  {
+    // HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
 
+    static float theta = 0;
+    FOC(0, 1, theta);
+
+    theta += 0.001745329f;
+    if (theta > 6.2831852f)
+      theta = 0;
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -117,6 +128,7 @@ int main(void)
   MX_OPAMP2_Init();
   MX_OPAMP3_Init();
   MX_TIM1_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   HAL_OPAMP_Start(&hopamp1);
   HAL_OPAMP_Start(&hopamp2);
@@ -124,17 +136,22 @@ int main(void)
   HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
   HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+  HAL_TIM_Base_Start_IT(&htim6);
 
   HAL_TIM_Base_Start(&htim1);
+
   // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
   // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
   // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
   // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-  HAL_ADCEx_InjectedStart_IT(&hadc1);
-  HAL_ADCEx_InjectedStart(&hadc2);
+  // HAL_ADCEx_InjectedStart_IT(&hadc1);
+  // HAL_ADCEx_InjectedStart(&hadc2);
+
+  int counter = 0;
+  char message[20];
 
   /* USER CODE END 2 */
 
@@ -142,6 +159,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // counter = __HAL_TIM_GET_COUNTER(&htim6);
+    // sprintf(message, "counter: %d", counter);
+    // HAL_UART_Transmit_IT(&huart3, (uint8_t *)message, strlen(message));
+    // HAL_Delay(99);
     // HAL_ADC_Start(&hadc1);
     // HAL_ADC_Start(&hadc2);
     // Vpoten = HAL_ADC_GetValue(&hadc1);
@@ -241,7 +262,6 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
     //		TIM1->CCR1 = 2000;
     //		TIM1->CCR2 = 4000;
     //		TIM1->CCR3 = 6000;
- 
 
     memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
     HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);

@@ -1,40 +1,43 @@
 #include "foc.h"
 #include "arm_math.h"
 
-void revParkOperate(float uD, float uQ, float theta, float *vAplha, float *vBeta)
+void revParkOperate(float uD, float uQ, float theta, float *uAlpha, float *uBeta)
 {
-    *vAplha = uD * arm_cos_f32(theta) - uQ * arm_sin_f32(theta);
-    *vBeta = uD * arm_sin_f32(theta) + uQ * arm_cos_f32(theta);
+    *uAlpha = uD * arm_cos_f32(theta) - uQ * arm_sin_f32(theta);
+    *uBeta = uD * arm_sin_f32(theta) + uQ * arm_cos_f32(theta);
 }
 
 const char sectorRemap[] = {0, 2, 6, 1, 4, 3, 5};
 
+static float A, B, C;
+
 char getSector(float uAlpha, float uBeta)
 {
-    float u1 = uBeta;
-    float u2 = sqrt(3) / 2 * uAlpha - 0.5f * uBeta;
-    float u3 = -sqrt(3) / 2 * uAlpha - 0.5f * uBeta;
+    A = uBeta;
+    B = sqrt(3) / 2.0f * uAlpha - uBeta / 2.0f;
+    C = -sqrt(3) / 2.0f * uAlpha - uBeta / 2.0f;
 
     char N = 0;
-    if (u1 > 0)
+
+    if (A > 0)
         N++;
 
-    if (u2 > 0)
+    if (B > 0)
         N += 2;
 
-    if (u3 > 0)
+    if (C > 0)
         N += 4;
 
     return sectorRemap[N];
 }
 
-void SVPWM(char sector, float uAlpha, float uBeta, float period, char Udc)
+void SVPWM(char sector, float uAlpha, float uBeta)
 {
     float tFirst = 0, tSecond = 0;
 
-    float X = sqrt(3) * period * uBeta / U_DC;
-    float Y = sqrt(3) * period / U_DC * (sqrt(3) * uAlpha / 2 + uBeta / 2);
-    float Z = sqrt(3) * period / U_DC * (-sqrt(3) * uAlpha / 2 + uBeta / 2);
+    float X = sqrt(3) * PWM_PERIOD * uBeta / U_DC;
+    float Y = sqrt(3) * PWM_PERIOD / U_DC * (sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
+    float Z = sqrt(3) * PWM_PERIOD / U_DC * (-sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
 
     switch (sector)
     {
@@ -68,15 +71,15 @@ void SVPWM(char sector, float uAlpha, float uBeta, float period, char Udc)
 
     float t = tFirst + tSecond;
 
-    if (t > period)
+    if (t > PWM_PERIOD)
     {
-        tFirst = tFirst / t * period;
-        tSecond = tSecond / t * period;
+        tFirst = tFirst / t * PWM_PERIOD;
+        tSecond = tSecond / t * PWM_PERIOD;
     }
 
-    int v1 = (period - tFirst - tSecond) / 4;
-    int v2 = v1 + tFirst / 2;
-    int v3 = v2 + tSecond / 2;
+    int v1 = (PWM_PERIOD - tFirst - tSecond) / 4.0f;
+    int v2 = v1 + tFirst / 2.0f;
+    int v3 = v2 + tSecond / 2.0f;
 
     int pwm1Duty, pwm2Duty, pwm3Duty;
 
@@ -121,3 +124,55 @@ void SVPWM(char sector, float uAlpha, float uBeta, float period, char Udc)
 
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
+
+void FOC(float uD, float uQ, float theta)
+{
+    float uAlpha, uBeta;
+
+    revParkOperate(uD, uQ, theta, &uAlpha, &uBeta);
+
+    char sector = getSector(uAlpha, uBeta);
+
+    SVPWM(sector, uAlpha, uBeta);
+}
+// void vectorsCompute(char sector, float uAlpha, float uBeta, float period, char Udc, float *tFirst, float *tSecond)
+// {
+
+//     float X = FACTOR * A;
+//     float Y = FACTOR * B;
+//     float Z = FACTOR * C;
+
+//     switch (sector)
+//     {
+//     case 1:
+//         *tFirst = -Z;
+//         *tSecond = X;
+//         break;
+//     case 2:
+//         *tFirst = Z;
+//         *tSecond = Y;
+//         break;
+//     case 3:
+//         *tFirst = X;
+//         *tSecond = -Y;
+//         break;
+//     case 4:
+//         *tFirst = -X;
+//         *tSecond = Z;
+//         break;
+
+//     case 5:
+//         *tFirst = -Y;
+//         *tSecond = -Z;
+//         break;
+
+//     case 6:
+//         *tFirst = Y;
+//         *tSecond = -X;
+//         break;
+//     }
+// }
+
+// void pwmGenerate(float tFirst, float tSecond)
+// {
+// }
