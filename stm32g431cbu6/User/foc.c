@@ -28,6 +28,8 @@ char getSector(float uAlpha, float uBeta)
     if (C > 0)
         N += 4;
 
+    temp[4] = N;
+
     return sectorRemap[N];
 }
 
@@ -121,7 +123,11 @@ void SVPWM(char sector, float uAlpha, float uBeta)
         pwm3Duty = v2;
         break;
     }
+    temp[1] = pwm1Duty;
+    temp[2] = pwm2Duty;
+    temp[3] = pwm3Duty;
 
+    // PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
 

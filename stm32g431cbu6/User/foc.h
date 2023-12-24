@@ -3,8 +3,8 @@
 
 #include "main.h"
 
-#define PWM_PERIOD 16000 // PWM period * 2
-#define U_DC 24
+#define PWM_PERIOD 8000.0f // PWM period * 2
+#define U_DC 24.0f
 #define FACTOR sqrt(3) * PWM_PERIOD / U_DC
 
 #define PWM_GENERATE(p1, p2, p3) \
