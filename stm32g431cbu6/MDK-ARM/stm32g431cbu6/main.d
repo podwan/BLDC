@@ -45,4 +45,4 @@ stm32g431cbu6\main.o: ../Core/Inc/usart.h
 stm32g431cbu6\main.o: ../Core/Inc/gpio.h
 stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-stm32g431cbu6\main.o: ..\User\foc.h
+stm32g431cbu6\main.o: ../User/foc.h

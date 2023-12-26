@@ -75,31 +75,31 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char data[] = "😂😂😂😂😂😂😂😊😊";
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  if (htim == &htim6)
-  {
-    // HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
+// char data[] = "😂😂😂😂😂😂😂😊😊";
+// void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+// {
+//   if (htim == &htim6)
+//   {
+//     // HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
 
-    static float theta = 0;
-    FOC(0, 5, theta);
+//     static float theta = 0;
+//     FOC(0, 5, theta);
 
-    theta += 0.001745329f;
-    if (theta > 6.2831852f)
-      theta = 0;
+//     theta += 0.001745329f;
+//     if (theta > 6.2831852f)
+//       theta = 0;
 
-    temp[0] = theta;
-    memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-    HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
-  }
-}
+//     temp[0] = theta;
+//     memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
+//     HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+//   }
+// }
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -132,7 +132,6 @@ int main(void)
   MX_OPAMP2_Init();
   MX_OPAMP3_Init();
   MX_TIM1_Init();
-  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   HAL_OPAMP_Start(&hopamp1);
   HAL_OPAMP_Start(&hopamp2);
@@ -168,52 +167,29 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // if ((GPIOA->IDR & GPIO_PIN_8) != 0)
-    // {
-    //   temp[0] = 1.0f;
-    // }
-    // else
-    // {
-    //   temp[0] = 0.0f;
-    // }
-    // if ((GPIOA->IDR & GPIO_PIN_9) != 0)
-    // {
-    //   temp[1] = 3.0f;
-    // }
-    // else
-    // {
-    //   temp[1] = 2.0f;
-    // }
-    // if ((GPIOA->IDR & GPIO_PIN_10) != 0)
-    // {
-    //   temp[2] = 5.0f;
-    // }
-    // else
-    // {
-    //   temp[2] = 4.0f;
-    // }
-    // memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-    // HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 5 * 4);
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-   */
+  */
   HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
+  * in the RCC_OscInitTypeDef structure.
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -229,8 +205,9 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -351,9 +328,9 @@ int fputc(int ch, FILE *f)
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -365,14 +342,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef USE_FULL_ASSERT
+#ifdef  USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
