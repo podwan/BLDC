@@ -17,7 +17,7 @@ Library Manager: ArmAr.exe V5.06 update 7 (build 960)
 Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
 CPU DLL:         SARMCM3.DLL V5.36.0.0
 Dialog DLL:      DCM.DLL V1.17.3.0
-Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
+Target DLL:      CMSIS_AGDI.dll V1.33.0.0
 Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
@@ -34,11 +34,13 @@ compiling main.c...
     int counter = 0;
 ../Core/Src/main.c(163): warning:  #177-D: variable "message"  was declared but never referenced
     char message[20];
-../Core/Src/main.c: 3 warnings, 0 errors
+../Core/Src/main.c(276): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
+    static uint16_t obsever_cnt;
+../Core/Src/main.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=23172 RO-data=2628 RW-data=68 ZI-data=2092  
+Program Size: Code=22648 RO-data=2628 RW-data=96 ZI-data=2088  
 FromELF: creating hex file...
-"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 3 Warning(s).
+"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 

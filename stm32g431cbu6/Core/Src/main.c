@@ -52,7 +52,7 @@ uint16_t IA_Offset, IB_Offset, IC_Offset;
 uint16_t adc1_in1, adc1_in2, adc1_in3, Vpoten, adc_vbus;
 uint8_t ADC_offset = 0;
 float temp[5];
-uint8_t tempData[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0x80, 0x7F};
+uint8_t tempData[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x80, 0x7F};
 
 /* USER CODE END PD */
 
@@ -83,7 +83,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     // HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
 
     static float theta = 0;
-    FOC(0, 10, theta);
+    FOC(0, 5, theta);
 
     theta += 0.001745329f;
     if (theta > 6.2831852f)
@@ -137,27 +137,27 @@ int main(void)
   HAL_OPAMP_Start(&hopamp1);
   HAL_OPAMP_Start(&hopamp2);
   HAL_OPAMP_Start(&hopamp3);
-  HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
-  // HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-  // HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
-
-  HAL_TIM_Base_Start_IT(&htim6);
-  // TIM1->PSC = 30000;
-  // TIM1->ARR = 10000;
-  // TIM1->CCR1 = 2000;
-  // TIM1->CCR2 = 5000;
-  // TIM1->CCR3 = 8000;
+  // HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+  __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_JEOC);
+  __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_EOC);
+  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_JEOC);
+  HAL_ADCEx_InjectedStart_IT(&hadc1);
+  HAL_ADCEx_InjectedStart(&hadc2);
+  TIM1->ARR = 8000 - 1;
+  TIM1->CCR4 = 8000 - 2;
+  // HAL_TIM_Base_Start_IT(&htim6);
   HAL_TIM_Base_Start(&htim1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-  // HAL_ADCEx_InjectedStart_IT(&hadc1);
-  // HAL_ADCEx_InjectedStart(&hadc2);
 
   int counter = 0;
   char message[20];
@@ -272,21 +272,51 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
+  static uint8_t cnt;
+  static uint16_t obsever_cnt;
+  /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   if (hadc == &hadc1)
   {
-    //		temp[0] = hadc1.Instance->JDR1;
-    //		temp[0] = (temp[0] - 0x7ef)*0.02197f;
-    //		temp[1] = hadc1.Instance->JDR2;
-    //		temp[1] = (temp[1] - 0x7f5)*0.02197f;
-    //		temp[2] = hadc2.Instance->JDR1;
-    //		temp[2] = (temp[2] - 0x7e8)*0.02197f;
-    //		TIM1->CCR1 = 2000;
-    //		TIM1->CCR2 = 4000;
-    //		TIM1->CCR3 = 6000;
+    if (ADC_offset == 0)
+    {
+      cnt++;
+      adc1_in1 = hadc1.Instance->JDR1;
+      adc1_in2 = hadc2.Instance->JDR1;
+      adc1_in3 = hadc1.Instance->JDR2;
+      IA_Offset += adc1_in1;
+      IB_Offset += adc1_in2;
+      IC_Offset += adc1_in3;
+      if (cnt >= 10)
+      {
+        ADC_offset = 1;
+        IA_Offset = IA_Offset / 10;
+        IB_Offset = IB_Offset / 10;
+        IC_Offset = IC_Offset / 10;
+      }
+    }
+    else
+    {
+      adc1_in1 = hadc1.Instance->JDR1;
+      adc1_in3 = hadc1.Instance->JDR2;
+      adc1_in2 = hadc2.Instance->JDR1;
+      Ia = (adc1_in1 - IA_Offset) * 0.02197f;
+      Ib = (adc1_in2 - IB_Offset) * 0.02197f;
+      Ic = (adc1_in3 - IC_Offset) * 0.02197f;
 
-    // memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-    // HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+      static float theta = 0;
+      FOC(0, 5, theta);
+
+      theta += 0.01f;
+      if (theta > 6.2831852f)
+        theta = 0;
+
+      temp[0] = Ia;
+      temp[1] = Ib;
+
+      memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
+      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+    }
   }
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
