@@ -376,3 +376,4 @@ Z1(t) 为位移量，Z2(t)为速度量， U(t)为f(t)力量
 [SVPWM]: https://blog.csdn.net/michaelf/article/details/94013805
 [观测器]: https://zhuanlan.zhihu.com/p/626503697
 
+[现代控制理论]: https://zhuanlan.zhihu.com/p/57051153
