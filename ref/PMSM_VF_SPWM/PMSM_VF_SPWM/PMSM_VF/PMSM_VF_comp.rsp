@@ -1,0 +1,7 @@
+﻿-I"C:\Users\guoqiang\Desktop\Motor Design"
+-I"C:\Users\guoqiang\Desktop\Motor Design\PMSM_VF_ert_rtw"
+-IF:\MATLAB2022a\extern\include
+-IF:\MATLAB2022a\simulink\include
+-IF:\MATLAB2022a\rtw\c\src
+-IF:\MATLAB2022a\rtw\c\src\ext_mode\common
+-IF:\MATLAB2022a\rtw\c\ert
