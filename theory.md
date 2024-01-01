@@ -166,16 +166,23 @@ Ia + Ib + Ic = 0
 $$
 ==》  																		
 $$
-Iα = 3Ia/2
+Iα = 3/2 * Ia
 $$
 
 $$
-Iβ = √3Ib + √3Ia/2
+Iβ = √3 * Ib + √3/2 * Ia
 $$
 
 > 实际电路中采集两路电流即可 	
 
+等幅值变换：
+$$
+Iα = Ia
+$$
 
+$$
+Iβ = √3 * Ib + √3/2 * Ia
+$$
 
 Iα 方向与某一相重合，Iβ与Iα垂直，是相对于定子固定的两个矢量
 
@@ -211,7 +218,7 @@ Iα 方向与某一相重合，Iβ与Iα垂直，是相对于定子固定的两�
 
 ## PID
 
-得到iQ和iD及转子角度θ及转速w后
+![](C:\Users\18575\Desktop\bldc\img\PI电流环参数整定.png)
 
 
 
@@ -221,13 +228,13 @@ Iα 方向与某一相重合，Iβ与Iα垂直，是相对于定子固定的两�
 
 需用软件建立观测器，对位置或速度进行估算，进行闭环控制
 
-![](G:\workSpace\bldc\img\无感FOC.png)
+![](img\无感FOC.png)
 
 ### 状态观测器
 
 状态观测器根据系统的输入输出来估计系统的状态，即根据已知量去估算未知量
 
-![](G:\workSpace\bldc\img\状态观测器1.webp)
+![](img\状态观测器1.webp)
 
 建立用于描述真实电机的数学模型，理论上如果建立的数学模型足够精确，当真实电机与电机数学模型具有相同的输入时，其必有相同的输出。此时我们就可以通过建立的电机数学模型来获得我们所需要的电机状态量。但上述系统会存在如下问题：
 
@@ -237,30 +244,30 @@ Iα 方向与某一相重合，Iβ与Iα垂直，是相对于定子固定的两�
 
 为了解决上述问题，我们对状态观测器增加反馈，通过反馈来不断的修正状态观测器的输出，使状态观测器尽可能的接近真实电机，如下图所示：
 
-![](G:\workSpace\bldc\img\状态观测器1.webp)
+![](img\状态观测器1.webp)
 **反馈方式与修正方式的不同产生了不同种类的状态观测器**
 
 ### 滑膜状态观测器
 
 表贴式PMSM数学模型
 
-![](G:\workSpace\bldc\img\surfaceMountPMSMmathModel.png)
+![](img\surfaceMountPMSMmathModel.png)
 
 其中psi （三叉戟）为磁链  L为电感  E为反向电动势  w为角速度   p = d/dt微分运算
 
-![](G:\workSpace\bldc\img\观测器θ解算.jpg)
+![](img\观测器θ解算.jpg)
 
-![](G:\workSpace\bldc\img\SMO计算z.webp)
+![](img\SMO计算z.webp)
 
-![](G:\workSpace\bldc\img\SMO计算z图示.webp)
+![](img\SMO计算z图示.webp)
 
-![](G:\workSpace\bldc\img\SMO反向电动势解算1.jpg)
+![](img\SMO反向电动势解算1.jpg)
 
-![](G:\workSpace\bldc\img\SMO解算θ.webp)
+![](img\SMO解算θ.webp)
 
-![](G:\workSpace\bldc\img\传统SMO整体框图.webp)
+![](img\传统SMO整体框图.webp)
 
-![](G:\workSpace\bldc\img\改进SMO.webp)
+![](img\改进SMO.webp)
 $$
 Eα  = z+mEα
 $$
@@ -271,7 +278,7 @@ $$
 
 根据求得的z即可得到反向电动势E
 
-![](G:\workSpace\bldc\img\改进SMO图示.webp)
+![](img\改进SMO图示.webp)
 
 总结：通过对电机进行数学建模（未知量为反向电动势），并根据实际运行的输入和输出，通过反馈的方式解算出未知量（使未知量收敛），得到反向电动势进而算出θ
 
@@ -279,25 +286,25 @@ $$
 
 电机数学模型：
 
-![](G:\workSpace\bldc\img\电机数学模型.jpg)
+![](img\电机数学模型.jpg)
 
-![](G:\workSpace\bldc\img\龙伯格观测器引入.png)
+![](img\龙伯格观测器引入.png)
 
 其中左下角为现代控制理论中的状态空间方程
 
-![](G:\workSpace\bldc\img\状态空间方程1.jpg)
+![](img\状态空间方程1.jpg)
 
 其中右下角为传递函数，用状态空间方程：
 
-![](G:\workSpace\bldc\img\状态空间方程2.jpg)
+![](img\状态空间方程2.jpg)
 
 Z1(t) 为位移量，Z2(t)为速度量， U(t)为f(t)力量
 
-![](G:\workSpace\bldc\img\状态空间方程3.jpg)
+![](img\状态空间方程3.jpg)
 
 其中Z(t)是速度和加速度，Y(t)是速度，X(t)是f(t)力量
 
-![](G:\workSpace\bldc\img\电机状态空间方程.jpg)
+![](img\电机状态空间方程.jpg)
 
 
 
@@ -309,9 +316,9 @@ Z1(t) 为位移量，Z2(t)为速度量， U(t)为f(t)力量
 
 龙伯格观测器的结构如下图所示：
 
-![](G:\workSpace\bldc\img\龙伯格结构.webp)
+![](img\龙伯格结构.webp)
 
-![](G:\workSpace\bldc\img\龙伯格一般表达式.webp)
+![](img\龙伯格一般表达式.webp)
 
 
 
