@@ -16,8 +16,8 @@ static float A, B, C;
 char getSector(float uAlpha, float uBeta)
 {
     A = uBeta;
-    B = sqrt(3) / 2.0f * uAlpha - uBeta / 2.0f;
-    C = -sqrt(3) / 2.0f * uAlpha - uBeta / 2.0f;
+    B = _SQRT3 / 2.0f * uAlpha - uBeta / 2.0f;
+    C = -_SQRT3 / 2.0f * uAlpha - uBeta / 2.0f;
 
     char N = 0;
 
@@ -39,11 +39,11 @@ void SVPWM(char sector, float uAlpha, float uBeta)
 {
     float tFirst = 0, tSecond = 0;
 
-    float X = sqrt(3) * PWM_PERIOD * uBeta / U_DC;
-    float Y = sqrt(3) * PWM_PERIOD / U_DC * (sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
-    float Z = sqrt(3) * PWM_PERIOD / U_DC * (-sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
+    float X = _SQRT3 * PWM_PERIOD * uBeta / U_DC;
+    float Y = _SQRT3 * PWM_PERIOD / U_DC * (_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
+    float Z = _SQRT3 * PWM_PERIOD / U_DC * (-_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
     //  i = Y;
-    //  j = sqrt(3) * PWM_PERIOD / U_DC * (sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
+    //  j = _SQRT3 * PWM_PERIOD / U_DC * (_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
 
     switch (sector)
     {
@@ -83,9 +83,9 @@ void SVPWM(char sector, float uAlpha, float uBeta)
         tSecond = tSecond / t * PWM_PERIOD;
     }
 
-    int v1 = (PWM_PERIOD - tFirst - tSecond) / 4.0f;
-    int v2 = v1 + tFirst / 2.0f;
-    int v3 = v2 + tSecond / 2.0f;
+    int v1 = (PWM_PERIOD - tFirst - tSecond) / 2.0f;
+    int v2 = v1 + tFirst;
+    int v3 = v2 + tSecond;
 
     int pwm1Duty, pwm2Duty, pwm3Duty;
 
@@ -149,7 +149,7 @@ void FOC(float uD, float uQ, float theta)
 void clark(float iA, float iB, float *iAlpha, float *iBeta)
 {
     *iAlpha = 3 / 2 * iA;
-    *iBeta = sqrt(3) * iB + sqrt(3) / 2.0f * iA;
+    *iBeta = _SQRT3 * iB + _SQRT3 / 2.0f * iA;
 }
 
 void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)

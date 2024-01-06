@@ -282,7 +282,7 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
       Ic = (adc1_in3 - IC_Offset) * 0.02197f;
 
       static float theta = 0;
-      FOC(0, 2.5, theta);
+      FOC(0, 3, theta);
 
       theta += 0.01f;
       if (theta > 6.2831852f)

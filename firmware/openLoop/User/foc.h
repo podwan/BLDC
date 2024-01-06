@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-#define PWM_PERIOD 16000.0f // PWM period * 2
+#define PWM_PERIOD 8000.0f // PWM period * 2
 #define U_DC 24.0f
 // #define FACTOR _SQRT3 * PWM_PERIOD / U_DC
 
