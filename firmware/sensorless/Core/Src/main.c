@@ -278,10 +278,10 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
       adc1_in2 = hadc2.Instance->JDR1;
       Ia = (adc1_in1 - IA_Offset) * 0.02197f;
       Ib = (adc1_in2 - IB_Offset) * 0.02197f;
-      Ic = (adc1_in3 - IC_Offset) * 0.02197f;
+      Ic = (adc1_in3 - IC_Offset) * 0.02197f; // 0.02197265625
 
       static float theta = 0;
-      FOC(Ia, Ib, 5, theta);
+      FOC(0, 3, theta);
 
       theta += 0.01f;
       if (theta > 6.2831852f)
@@ -289,7 +289,11 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
 
       temp[0] = Ia;
       temp[1] = Ib;
+      temp[2] = Ic;
 
+      clarke(Ia, Ib, Ic, temp + 3, temp + 4);
+      // temp[3] = pwm2Duty;
+      // temp[4] = pwm3Duty;
       memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
       HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
     }

@@ -42,8 +42,6 @@ void SVPWM(char sector, float uAlpha, float uBeta)
     float X = _SQRT3 * PWM_PERIOD * uBeta / U_DC;
     float Y = _SQRT3 * PWM_PERIOD / U_DC * (_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
     float Z = _SQRT3 * PWM_PERIOD / U_DC * (-_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
-    //  i = Y;
-    //  j = _SQRT3 * PWM_PERIOD / U_DC * (_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
 
     switch (sector)
     {

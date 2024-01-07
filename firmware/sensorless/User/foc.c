@@ -1,11 +1,12 @@
 #include "foc.h"
-#include "arm_math.h"
-#include "pid.h"
-
+// #include "arm_math.h"
+#include "math_utils.h"
+#include <cmath>
+float i, j;
 void revParkOperate(float uD, float uQ, float theta, float *uAlpha, float *uBeta)
 {
-    *uAlpha = uD * arm_cos_f32(theta) - uQ * arm_sin_f32(theta);
-    *uBeta = uD * arm_sin_f32(theta) + uQ * arm_cos_f32(theta);
+    *uAlpha = uD * CosApprox(theta) - uQ * SinApprox(theta);
+    *uBeta = uD * SinApprox(theta) + uQ * CosApprox(theta);
 }
 
 const char sectorRemap[] = {0, 2, 6, 1, 4, 3, 5};
@@ -15,8 +16,8 @@ static float A, B, C;
 char getSector(float uAlpha, float uBeta)
 {
     A = uBeta;
-    B = sqrt(3) / 2.0f * uAlpha - uBeta / 2.0f;
-    C = -sqrt(3) / 2.0f * uAlpha - uBeta / 2.0f;
+    B = _SQRT3 / 2.0f * uAlpha - uBeta / 2.0f;
+    C = -_SQRT3 / 2.0f * uAlpha - uBeta / 2.0f;
 
     char N = 0;
 
@@ -38,9 +39,9 @@ void SVPWM(char sector, float uAlpha, float uBeta)
 {
     float tFirst = 0, tSecond = 0;
 
-    float X = sqrt(3) * PWM_PERIOD * uBeta / U_DC;
-    float Y = sqrt(3) * PWM_PERIOD / U_DC * (sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
-    float Z = sqrt(3) * PWM_PERIOD / U_DC * (-sqrt(3) * uAlpha / 2.0f + uBeta / 2.0f);
+    float X = _SQRT3 * PWM_PERIOD * uBeta / U_DC;
+    float Y = _SQRT3 * PWM_PERIOD / U_DC * (_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
+    float Z = _SQRT3 * PWM_PERIOD / U_DC * (-_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
 
     switch (sector)
     {
@@ -80,9 +81,9 @@ void SVPWM(char sector, float uAlpha, float uBeta)
         tSecond = tSecond / t * PWM_PERIOD;
     }
 
-    int v1 = (PWM_PERIOD - tFirst - tSecond) / 4.0f;
-    int v2 = v1 + tFirst / 2.0f;
-    int v3 = v2 + tSecond / 2.0f;
+    int v1 = (PWM_PERIOD - tFirst - tSecond) / 2.0f;
+    int v2 = v1 + tFirst;
+    int v3 = v2 + tSecond;
 
     int pwm1Duty, pwm2Duty, pwm3Duty;
 
@@ -124,55 +125,39 @@ void SVPWM(char sector, float uAlpha, float uBeta)
         pwm3Duty = v2;
         break;
     }
-    temp[2] = pwm1Duty;
-    temp[3] = pwm2Duty;
-    temp[4] = pwm3Duty;
+    // temp[2] = pwm1Duty;
+    // temp[3] = pwm2Duty;
+    // temp[4] = pwm3Duty;
 
     // PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
 
-static void clark(float iA, float iB, float *iAlpha, float *iBeta)
+void FOC(float uD, float uQ, float theta)
 {
-    *iAlpha = 3 / 2 * iA;
-    *iBeta = sqrt(3) * iB + sqrt(3) / 2.0f * iA;
-}
-
-static void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
-{
-    *iD = iAlpha * arm_cos_f32(theta) + iBeta * arm_sin_f32(theta);
-    *iQ = -iAlpha * arm_sin_f32(theta) + iBeta * arm_cos_f32(theta);
-}
-PID iPID;
-/*
-Kp = 0.00535 / (4 * 0.0001)  = 13.375
-Ki = 6.97 / (4 * 0.0001) = 17425
-
-*/
-void FOC(float iA, float iB, float iGoal, float theta)
-{
-
-    float iAlpha, iBeta;
-
-    clark(iA, iB, &iAlpha, &iBeta);
-
-    float iD, iQ;
-
-    park(iAlpha, iBeta, theta, &iD, &iQ);
-
-    pidInit(&iPID, iGoal, 0, 0, 1, 0, 0, 1, 24, 0);
- 
-
-    uQ = compute(&iPID, iQ);
-
     float uAlpha, uBeta;
 
-    revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
+    revParkOperate(uD, uQ, theta, &uAlpha, &uBeta);
 
     char sector = getSector(uAlpha, uBeta);
 
     SVPWM(sector, uAlpha, uBeta);
 }
+
+void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta)
+{
+    // iAlpha = (2/3) * (iA - iB / 2 - iC/2);
+    *iAlpha = 0.6666667f * (iA - 0.5f * (iB + iC));
+    // iBeta = (1/sqrt(3)) * (iB - iC);
+    *iBeta = 0.5773502691f * (iB - iC);
+}
+
+void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
+{
+    *iD = iAlpha * CosApprox(theta) + iBeta * SinApprox(theta);
+    *iQ = -iAlpha * SinApprox(theta) + iBeta * CosApprox(theta);
+}
+
 // void vectorsCompute(char sector, float uAlpha, float uBeta, float period, char Udc, float *tFirst, float *tSecond)
 // {
 

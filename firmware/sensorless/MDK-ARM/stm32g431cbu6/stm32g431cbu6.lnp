@@ -36,6 +36,7 @@
 "../Middlewares/ST/ARM/DSP/Lib/arm_cortexM4l_math.lib"
 "stm32g431cbu6\foc.o"
 "stm32g431cbu6\pid.o"
+"stm32g431cbu6\math_utils.o"
 --library_type=microlib --strict --scatter "stm32g431cbu6\stm32g431cbu6.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

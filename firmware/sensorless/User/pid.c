@@ -5,7 +5,7 @@ void pidInit(PID *pid, float setPoint,
              float kp, float ki, float kd,
              char positiveFeedback, float outputMax, float outputMin)
 {
-   pid->setPoint = setPoint;
+    
    pid->iTerms = iTerms;
    pid->lastInput = lastInput;
    pid->kp = kp;

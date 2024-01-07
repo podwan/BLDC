@@ -38,8 +38,6 @@ stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
-stm32g431cbu6\foc.o: ../Middlewares/ST/ARM/DSP/Inc/arm_math.h
-stm32g431cbu6\foc.o: ../Drivers/CMSIS/Include/core_cm4.h
-stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+stm32g431cbu6\foc.o: ..\User\math_utils.h
+stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-stm32g431cbu6\foc.o: ..\User\pid.h
