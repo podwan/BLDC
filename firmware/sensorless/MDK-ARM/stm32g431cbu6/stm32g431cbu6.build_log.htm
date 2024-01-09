@@ -17,29 +17,34 @@ Library Manager: ArmAr.exe V5.06 update 7 (build 960)
 Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
 CPU DLL:         SARMCM3.DLL V5.36.0.0
 Dialog DLL:      DCM.DLL V1.17.3.0
-Target DLL:      CMSIS_AGDI.dll V1.33.0.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
 Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 C:\Users\18575\Desktop\bldc\firmware\sensorless\MDK-ARM\stm32g431cbu6.uvprojx
-Project File Date:  01/03/2024
+Project File Date:  01/09/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'stm32g431cbu6'
-compiling main.c...
-../Core/Src/main.c(161): warning:  #177-D: variable "counter"  was declared but never referenced
-    int counter = 0;
-../Core/Src/main.c(162): warning:  #177-D: variable "message"  was declared but never referenced
-    char message[20];
-../Core/Src/main.c(252): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
-    static uint16_t obsever_cnt;
-../Core/Src/main.c: 3 warnings, 0 errors
-compiling foc.c...
+compiling sensor.c...
+..\User\common.h(16): warning:  #47-D: incompatible redefinition of macro "TRUE"  (declared at line 6)
+  #define TRUE (1 == 1)
+..\User\common.h(18): warning:  #47-D: incompatible redefinition of macro "FALSE"  (declared at line 8)
+  #define FALSE (!TRUE)
+..\User\common.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\User\sensor.c(3): warning:  #188-D: enumerated type mixed with another type
+  bool adc_isr_flag = 0;
+..\User\sensor.c(4): warning:  #188-D: enumerated type mixed with another type
+  bool opa_cali_flag = 0;
+..\User\sensor.c(10): warning:  #1-D: last line of file ends without a newline
+  }
+..\User\sensor.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=20200 RO-data=1376 RW-data=88 ZI-data=2016  
+Program Size: Code=20244 RO-data=1376 RW-data=88 ZI-data=2016  
 FromELF: creating hex file...
-"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 3 Warning(s).
+"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -63,7 +68,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.5.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Build Time Elapsed:  00:00:08
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

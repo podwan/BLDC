@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "foc.h"
+#include "sensor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -291,9 +292,13 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
       temp[1] = Ib;
       temp[2] = Ic;
 
-      clarke(Ia, Ib, Ic, temp + 3, temp + 4);
+      float iAlpha, iBeta;
+
+      clarke(Ia, Ib, Ic, &iAlpha, &iBeta);
       // temp[3] = pwm2Duty;
       // temp[4] = pwm3Duty;
+      temp[3] = positionE stimate(0, 3, iAlpha, iBeta);
+
       memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
       HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
     }

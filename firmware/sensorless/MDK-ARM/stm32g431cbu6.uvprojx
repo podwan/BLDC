@@ -1317,6 +1317,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\math_utils.c</FilePath>
             </File>
+            <File>
+              <FileName>sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\sensor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

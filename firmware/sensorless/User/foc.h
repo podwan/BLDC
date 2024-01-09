@@ -5,6 +5,7 @@
 
 #define PWM_PERIOD 8000.0f // PWM period * 2
 #define U_DC 24.0f
+#define uQ_MAX (U_DC / _SQRT3)
 // #define FACTOR _SQRT3 * PWM_PERIOD / U_DC
 
 #define PWM_GENERATE(p1, p2, p3) \

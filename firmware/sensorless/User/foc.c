@@ -158,6 +158,10 @@ void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
     *iQ = -iAlpha * SinApprox(theta) + iBeta * CosApprox(theta);
 }
 
+
+
+
+
 // void vectorsCompute(char sector, float uAlpha, float uBeta, float period, char Udc, float *tFirst, float *tSecond)
 // {
 
