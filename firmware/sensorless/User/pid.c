@@ -1,41 +1,38 @@
 #include "pid.h"
 
-void pidInit(PID *pid, float setPoint,
-             float iTerms, float lastInput,
-             float kp, float ki, float kd,
-             char positiveFeedback, float outputMax, float outputMin)
+void pidInit(PID *pid, float kp, float ki, float kd, float iTerms, float lastInput,
+             bool positiveFeedback, float outMax, float outMin)
 {
-    
-   pid->iTerms = iTerms;
-   pid->lastInput = lastInput;
    pid->kp = kp;
    pid->kd = kd;
    pid->ki = ki;
+   pid->iTerms = iTerms;
+   pid->lastInput = lastInput;
    pid->positiveFeedback = positiveFeedback;
-   pid->outputMax = outputMax;
-   pid->outputMin = outputMin;
+   pid->outMax = outMax;
+   pid->outMin = outMin;
 }
 
-unsigned int compute(PID *pid, float input)
+unsigned int compute(PID *pid, float setPoint, float input)
 {
 
    /*Compute all the working error variables*/
 
    float output;
-   float error = pid->setPoint - input;   // P
+   float error = setPoint - input;        // P
    float dInput = input - pid->lastInput; // D
    pid->iTerms += (pid->ki * error);      // I
-   if (pid->iTerms > pid->outputMax)
-      pid->iTerms = pid->outputMax;
-   else if (pid->iTerms < pid->outputMin)
-      pid->iTerms = pid->outputMin;
+   if (pid->iTerms > pid->outMax)
+      pid->iTerms = pid->outMax;
+   else if (pid->iTerms < pid->outMin)
+      pid->iTerms = pid->outMin;
 
    /*Compute PID output*/
    output = pid->kp * error + pid->iTerms - pid->kd * dInput;
-   if (output > pid->outputMax)
-      output = pid->outputMax;
-   else if (output < pid->outputMin)
-      output = pid->outputMin;
+   if (output > pid->outMax)
+      output = pid->outMax;
+   else if (output < pid->outMin)
+      output = pid->outMin;
 
    /*Remember some variables for next time*/
    pid->lastInput = input;

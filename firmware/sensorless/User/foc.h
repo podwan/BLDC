@@ -19,5 +19,5 @@
 // char getSector(float uAlpha, float uBeta);
 // void SVPWM(char sector, float uAlpha, float uBeta);
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta);
-void FOC(float uD, float uQ, float theta);
+void openLoop(float uD, float uQ, float theta);
 #endif

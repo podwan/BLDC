@@ -133,7 +133,7 @@ void SVPWM(char sector, float uAlpha, float uBeta)
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
 
-void FOC(float uD, float uQ, float theta)
+void openLoop(float uD, float uQ, float theta)
 {
     float uAlpha, uBeta;
 
@@ -142,6 +142,14 @@ void FOC(float uD, float uQ, float theta)
     char sector = getSector(uAlpha, uBeta);
 
     SVPWM(sector, uAlpha, uBeta);
+}
+
+void closeLoopHallSpeed(float speed, float iA, float iB, float iC)
+{
+}
+
+void closeSpeedLoopSensorless(float speed, float iA, float iB, float iC)
+{
 }
 
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta)
@@ -157,10 +165,6 @@ void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
     *iD = iAlpha * CosApprox(theta) + iBeta * SinApprox(theta);
     *iQ = -iAlpha * SinApprox(theta) + iBeta * CosApprox(theta);
 }
-
-
-
-
 
 // void vectorsCompute(char sector, float uAlpha, float uBeta, float period, char Udc, float *tFirst, float *tSecond)
 // {
