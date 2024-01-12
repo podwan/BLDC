@@ -160,13 +160,13 @@ int main(void)
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
 
-  // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-  // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-  // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
   HAL_TIMEx_HallSensor_Start_IT(&htim4);
 
@@ -255,7 +255,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
            the HAL_GPIO_EXTI_Callback could be implemented in the user file
    */
 }
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
 {
   static uint8_t cnt;
   static uint16_t obsever_cnt;
@@ -289,26 +289,20 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
       Ib = (adc1_in2 - IB_Offset) * 0.02197f;
       Ic = (adc1_in3 - IC_Offset) * 0.02197f; // 0.02197265625
                                               // open loop
+      HallTheta = HallTheta + HallThetaAdd;
+      if (HallTheta < 0.0f)
       {
-        static float theta = 0;
-        openLoop(0, 3, theta);
-
-        theta += 0.01f;
-        if (theta > 6.2831852f)
-          theta = 0;
-
-        // temp[0] = Ia;
-        // temp[1] = Ib;
-        // temp[2] = Ic;
+        HallTheta += 2.0f * PI;
       }
-
-      float iAlpha, iBeta;
-
-      clarke(Ia, Ib, Ic, &iAlpha, &iBeta);
-      // temp[3] = pwm2Duty;
-      // temp[4] = pwm3Duty;
-      temp[3] = positionEstimate(0, 3, iAlpha, iBeta);
-
+      else if (HallTheta > (2.0f * PI))
+      {
+        HallTheta -= 2.0f * PI;
+      }
+      openLoop(0, 3, 500, 10000, 2);
+      // float speed;
+      // closeSpeedLoop(speed, Ia, Ib, Ic);
+      temp[0] = HallSpeed;
+      temp[1] = HallTheta;
       memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
       HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
     }
@@ -350,7 +344,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
   if (htim == &htim4)
   {
     HallTemp = HAL_TIM_ReadCapturedValue(&htim4, TIM_CHANNEL_1);
-    ;
     HallThetaAdd = (PI / 3) / (HallTemp / 10000000) / 10000;
     HallSpeed = (PI / 3) / (HallTemp / 10000000) * 30 / (2 * PI);
     HallReadTemp = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8);

@@ -39,3 +39,4 @@ stm32g431cbu6\pid.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 stm32g431cbu6\pid.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\pid.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 stm32g431cbu6\pid.o: ..\User\math_utils.h
+stm32g431cbu6\pid.o: ../Core/Inc/main.h

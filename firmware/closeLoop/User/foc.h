@@ -1,7 +1,7 @@
 #ifndef __FOC_H
 #define __FOC_H
 
-#include "main.h"
+#include "common.h"
 
 #define PWM_PERIOD 8000.0f // PWM period * 2
 #define U_DC 24.0f
@@ -19,5 +19,5 @@
 // char getSector(float uAlpha, float uBeta);
 // void SVPWM(char sector, float uAlpha, float uBeta);
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta);
-void openLoop(float uD, float uQ, float theta);
+void openLoop(float uD, float uQ, uint speed, float frequence, uchar polePairs);
 #endif

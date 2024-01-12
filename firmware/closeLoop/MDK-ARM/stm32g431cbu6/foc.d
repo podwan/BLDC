@@ -1,6 +1,6 @@
 stm32g431cbu6\foc.o: ..\User\foc.c
 stm32g431cbu6\foc.o: ..\User\foc.h
-stm32g431cbu6\foc.o: ../Core/Inc/main.h
+stm32g431cbu6\foc.o: ..\User\common.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
 stm32g431cbu6\foc.o: ../Core/Inc/stm32g4xx_hal_conf.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h
@@ -39,5 +39,6 @@ stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 stm32g431cbu6\foc.o: ..\User\math_utils.h
+stm32g431cbu6\foc.o: ../Core/Inc/main.h
 stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

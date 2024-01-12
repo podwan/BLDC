@@ -39,3 +39,4 @@ stm32g431cbu6\sensor.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex
 stm32g431cbu6\sensor.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\sensor.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 stm32g431cbu6\sensor.o: ..\User\math_utils.h
+stm32g431cbu6\sensor.o: ../Core/Inc/main.h

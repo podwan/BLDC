@@ -30,8 +30,6 @@ char getSector(float uAlpha, float uBeta)
     if (C > 0)
         N += 4;
 
-    temp[4] = N;
-
     return sectorRemap[N];
 }
 
@@ -125,17 +123,31 @@ void SVPWM(char sector, float uAlpha, float uBeta)
         pwm3Duty = v2;
         break;
     }
-    // temp[2] = pwm1Duty;
-    // temp[3] = pwm2Duty;
-    // temp[4] = pwm3Duty;
+    temp[2] = pwm1Duty;
+    temp[3] = pwm2Duty;
+    temp[4] = pwm3Duty;
 
     // PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
+/*
+parameters:
+speed at rpm/min at rpm/min
+frequence is about the function call frequence
 
-void openLoop(float uD, float uQ, float theta)
+*/
+void openLoop(float uD, float uQ, uint speed, float frequence, uchar polePairs)
 {
+    static float theta, thetaAdd;
+    thetaAdd = speed * _2PI / 60.0f / frequence * polePairs;
+    theta += thetaAdd;
+
+    if (theta > 6.2831852f)
+        theta = 0;
+
     float uAlpha, uBeta;
+    if (uQ > uQ_MAX)
+        uQ = uQ_MAX;
 
     revParkOperate(uD, uQ, theta, &uAlpha, &uBeta);
 
@@ -144,8 +156,11 @@ void openLoop(float uD, float uQ, float theta)
     SVPWM(sector, uAlpha, uBeta);
 }
 
-void closeLoopHallSpeed(float speed, float iA, float iB, float iC)
+void closeSpeedLoop(float speed, float iA, float iB, float iC)
 {
+    float iAlpha, iBeta;
+
+    clarke(iA, iB, iC, &iAlpha, &iBeta);
 }
 
 void closeSpeedLoopSensorless(float speed, float iA, float iB, float iC)
