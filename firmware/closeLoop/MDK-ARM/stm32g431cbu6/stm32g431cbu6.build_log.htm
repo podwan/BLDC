@@ -22,16 +22,27 @@ Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 C:\Users\18575\Desktop\bldc\firmware\closeLoop\MDK-ARM\stm32g431cbu6.uvprojx
-Project File Date:  01/13/2024
+Project File Date:  01/20/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'stm32g431cbu6'
-compiling tim.c...
+compiling as5600.c...
+..\User\as5600.c(59): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+    return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
+..\User\as5600.c: 1 warning, 0 errors
+compiling main.c...
+../User/common.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Src/main.c(315): warning:  #1182-D: a declaration cannot have a label
+          static uint openLoopCnt = 0;
+../Core/Src/main.c(270): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
+    static uint16_t obsever_cnt;
+../Core/Src/main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=21628 RO-data=1376 RW-data=112 ZI-data=2088  
+Program Size: Code=26620 RO-data=1376 RW-data=128 ZI-data=2168  
 FromELF: creating hex file...
-"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 0 Warning(s).
+"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -55,7 +66,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.5.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Build Time Elapsed:  00:00:05
+Build Time Elapsed:  00:00:26
 </pre>
 </body>
 </html>

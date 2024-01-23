@@ -29,6 +29,8 @@ stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h
+stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h
+stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_opamp.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_opamp_ex.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h
@@ -39,6 +41,7 @@ stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 stm32g431cbu6\main.o: ../Core/Inc/adc.h
 stm32g431cbu6\main.o: ../Core/Inc/dma.h
+stm32g431cbu6\main.o: ../Core/Inc/i2c.h
 stm32g431cbu6\main.o: ../Core/Inc/opamp.h
 stm32g431cbu6\main.o: ../Core/Inc/tim.h
 stm32g431cbu6\main.o: ../Core/Inc/usart.h
@@ -48,4 +51,4 @@ stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 stm32g431cbu6\main.o: ../User/foc.h
 stm32g431cbu6\main.o: ../User/common.h
 stm32g431cbu6\main.o: ../User/math_utils.h
-stm32g431cbu6\main.o: ../User/sensor.h
+stm32g431cbu6\main.o: ../User/as5600.h

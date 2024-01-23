@@ -30,6 +30,8 @@ stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h
 stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h
 stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h
 stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h
+stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h
+stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h
 stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_opamp.h
 stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_opamp_ex.h
 stm32g431cbu6\tim.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h

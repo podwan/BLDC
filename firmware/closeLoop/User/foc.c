@@ -2,7 +2,24 @@
 // #include "arm_math.h"
 #include "math_utils.h"
 #include <cmath>
+#include "pid.h"
+
 float i, j;
+
+void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta)
+{
+    // iAlpha = (2/3) * (iA - iB / 2 - iC/2);
+    *iAlpha = 0.6666667f * (iA - 0.5f * (iB + iC));
+    // iBeta = (1/sqrt(3)) * (iB - iC);
+    *iBeta = 0.5773502691f * (iB - iC);
+}
+
+void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
+{
+    *iD = iAlpha * CosApprox(theta) + iBeta * SinApprox(theta);
+    *iQ = -iAlpha * SinApprox(theta) + iBeta * CosApprox(theta);
+}
+
 void revParkOperate(float uD, float uQ, float theta, float *uAlpha, float *uBeta)
 {
     *uAlpha = uD * CosApprox(theta) - uQ * SinApprox(theta);
@@ -136,7 +153,7 @@ speed at rpm/min at rpm/min
 frequence is about the function call frequence
 
 */
-void openLoop(float uD, float uQ, uint speed, float frequence, uchar polePairs)
+void openLoop(float uQ, uint speed, float frequence, uchar polePairs)
 {
     static float theta, thetaAdd;
     thetaAdd = speed * _2PI / 60.0f / frequence * polePairs;
@@ -149,36 +166,38 @@ void openLoop(float uD, float uQ, uint speed, float frequence, uchar polePairs)
     if (uQ > uQ_MAX)
         uQ = uQ_MAX;
 
-    revParkOperate(uD, uQ, theta, &uAlpha, &uBeta);
+    revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
+
+    char sector = getSector(uAlpha, uBeta);
+
+    SVPWM(sector, uAlpha, uBeta);
+}
+// (PID *pid, float kp, float ki, float kd, bool positiveFB, float outMax, float outMin, float interval)
+void closeSpeedLoop(float currentSpeed, float setSpeed, float theta, float iA, float iB, float iC, float frequence)
+{
+    float iAlpha, iBeta;
+    clarke(iA, iB, iC, &iAlpha, &iBeta);
+    float iD, iQ;
+    park(iAlpha, iBeta, theta, &iD, &iQ);
+
+    PID speedPID, currentPID;
+    float IqRef, uQ;
+    pidInit(&speedPID, SPEED_KP, SPEED_KI, 0, 10000, uQ_MAX, -uQ_MAX, 1 / frequence);
+    uQ = pidCompute(&speedPID, setSpeed - currentSpeed);
+
+    // pidInit(&currentPID, SPEED_KP, SPEED_KI, 0, 0, 0, 0, uQ_MAX, 0);
+    // uQ = compute(&currentPID, IqRef, iQ);
+
+    float uAlpha, uBeta;
+    revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
 
     char sector = getSector(uAlpha, uBeta);
 
     SVPWM(sector, uAlpha, uBeta);
 }
 
-void closeSpeedLoop(float speed, float iA, float iB, float iC)
-{
-    float iAlpha, iBeta;
-
-    clarke(iA, iB, iC, &iAlpha, &iBeta);
-}
-
 void closeSpeedLoopSensorless(float speed, float iA, float iB, float iC)
 {
-}
-
-void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta)
-{
-    // iAlpha = (2/3) * (iA - iB / 2 - iC/2);
-    *iAlpha = 0.6666667f * (iA - 0.5f * (iB + iC));
-    // iBeta = (1/sqrt(3)) * (iB - iC);
-    *iBeta = 0.5773502691f * (iB - iC);
-}
-
-void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
-{
-    *iD = iAlpha * CosApprox(theta) + iBeta * SinApprox(theta);
-    *iQ = -iAlpha * SinApprox(theta) + iBeta * CosApprox(theta);
 }
 
 // void vectorsCompute(char sector, float uAlpha, float uBeta, float period, char Udc, float *tFirst, float *tSecond)

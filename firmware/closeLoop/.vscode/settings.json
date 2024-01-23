@@ -4,6 +4,8 @@
         "main.h": "c",
         "arm_math.h": "c",
         "cmath": "c",
-        "pid.h": "c"
+        "pid.h": "c",
+        "lowpassfilter.h": "c",
+        "common.h": "c"
     }
 }

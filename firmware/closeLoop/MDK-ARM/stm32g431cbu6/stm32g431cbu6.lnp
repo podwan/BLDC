@@ -4,6 +4,7 @@
 "stm32g431cbu6\gpio.o"
 "stm32g431cbu6\adc.o"
 "stm32g431cbu6\dma.o"
+"stm32g431cbu6\i2c.o"
 "stm32g431cbu6\opamp.o"
 "stm32g431cbu6\tim.o"
 "stm32g431cbu6\usart.o"
@@ -25,6 +26,8 @@
 "stm32g431cbu6\stm32g4xx_hal_pwr.o"
 "stm32g431cbu6\stm32g4xx_hal_pwr_ex.o"
 "stm32g431cbu6\stm32g4xx_hal_cortex.o"
+"stm32g431cbu6\stm32g4xx_hal_i2c.o"
+"stm32g431cbu6\stm32g4xx_hal_i2c_ex.o"
 "stm32g431cbu6\stm32g4xx_hal_opamp.o"
 "stm32g431cbu6\stm32g4xx_hal_opamp_ex.o"
 "stm32g431cbu6\stm32g4xx_hal_tim.o"
@@ -37,7 +40,8 @@
 "stm32g431cbu6\foc.o"
 "stm32g431cbu6\pid.o"
 "stm32g431cbu6\math_utils.o"
-"stm32g431cbu6\sensor.o"
+"stm32g431cbu6\lowpassfilter.o"
+"stm32g431cbu6\as5600.o"
 --library_type=microlib --strict --scatter "stm32g431cbu6\stm32g431cbu6.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

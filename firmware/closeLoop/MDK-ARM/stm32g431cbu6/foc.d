@@ -30,6 +30,8 @@ stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h
+stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h
+stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_opamp.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_opamp_ex.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h
@@ -42,3 +44,4 @@ stm32g431cbu6\foc.o: ..\User\math_utils.h
 stm32g431cbu6\foc.o: ../Core/Inc/main.h
 stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\foc.o: ..\User\pid.h
