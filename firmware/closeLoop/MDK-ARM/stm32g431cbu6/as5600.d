@@ -1,7 +1,6 @@
 stm32g431cbu6\as5600.o: ..\User\as5600.c
 stm32g431cbu6\as5600.o: ..\User\as5600.h
-stm32g431cbu6\as5600.o: ../Core/Inc/i2c.h
-stm32g431cbu6\as5600.o: ../Core/Inc/main.h
+stm32g431cbu6\as5600.o: ..\User\common.h
 stm32g431cbu6\as5600.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
 stm32g431cbu6\as5600.o: ../Core/Inc/stm32g4xx_hal_conf.h
 stm32g431cbu6\as5600.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h
@@ -41,3 +40,6 @@ stm32g431cbu6\as5600.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h
 stm32g431cbu6\as5600.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 stm32g431cbu6\as5600.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\as5600.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
+stm32g431cbu6\as5600.o: ..\User\math_utils.h
+stm32g431cbu6\as5600.o: ../Core/Inc/main.h
+stm32g431cbu6\as5600.o: ../Core/Inc/i2c.h

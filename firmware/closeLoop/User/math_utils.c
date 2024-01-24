@@ -1,7 +1,6 @@
 #include <cmath>
 #include "math_utils.h"
 
-
 const int SIN_MAP[200] = {0, 79, 158, 237, 316, 395, 473, 552, 631, 710, 789, 867, 946, 1024, 1103, 1181,
                           1260, 1338, 1416, 1494, 1572, 1650, 1728, 1806, 1883, 1961, 2038, 2115, 2192,
                           2269, 2346, 2423, 2499, 2575, 2652, 2728, 2804, 2879, 2955, 3030, 3105, 3180,
@@ -19,24 +18,25 @@ const int SIN_MAP[200] = {0, 79, 158, 237, 316, 395, 473, 552, 631, 710, 789, 86
                           9939, 9947, 9955, 9962, 9969, 9975, 9980, 9985, 9989, 9992, 9995, 9997, 9999,
                           10000, 10000};
 
-
 float SinApprox(float a)
 {
     if (a < _PI_2)
     {
-        return 0.0001f * (float) SIN_MAP[ROUND(126.6873f * a)];
-    } else if (a < _PI)
+        return 0.0001f * (float)SIN_MAP[ROUND(126.6873f * a)];
+    }
+    else if (a < _PI)
     {
-        return 0.0001f * (float) SIN_MAP[398 - ROUND(126.6873f * a)];
-    } else if (a < _3PI_2)
+        return 0.0001f * (float)SIN_MAP[398 - ROUND(126.6873f * a)];
+    }
+    else if (a < _3PI_2)
     {
-        return -0.0001f * (float) SIN_MAP[-398 + ROUND(126.6873f * a)];
-    } else
+        return -0.0001f * (float)SIN_MAP[-398 + ROUND(126.6873f * a)];
+    }
+    else
     {
-        return -0.0001f * (float) SIN_MAP[796 - ROUND(126.6873f * a)];
+        return -0.0001f * (float)SIN_MAP[796 - ROUND(126.6873f * a)];
     }
 }
-
 
 float CosApprox(float a)
 {
@@ -45,14 +45,12 @@ float CosApprox(float a)
 
     return SinApprox(aSin);
 }
-
-
+// 归一化角度到 [0,2PI]
 float normalizeAngle(float angle)
 {
     float a = fmod(angle, _2PI);
     return a >= 0 ? a : (a + _2PI);
 }
-
 
 // Square root approximation function using
 // https://reprap.org/forum/read.php?147,219210
@@ -63,9 +61,9 @@ float SqrtApprox(float value)
     float y;
 
     y = value;
-    i = *(long*) &y;
+    i = *(long *)&y;
     i = 0x5f375a86 - (i >> 1);
-    y = *(float*) &i;
+    y = *(float *)&i;
 
     return value * y;
 }

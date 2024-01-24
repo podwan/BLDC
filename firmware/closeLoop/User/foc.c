@@ -151,22 +151,36 @@ void SVPWM(char sector, float uAlpha, float uBeta)
 parameters:
 speed at rpm/min at rpm/min
 frequence is about the function call frequence
-
 */
-void openLoop(float uQ, uint speed, float frequence, uchar polePairs)
+
+void openLoop(float uQ, uint speed)
 {
     static float theta, thetaAdd;
-    thetaAdd = speed * _2PI / 60.0f / frequence * polePairs;
+    thetaAdd = speed * _2PI / 60.0f / FREQUENCE * POLE_PAIRS;
     theta += thetaAdd;
 
     if (theta > 6.2831852f)
         theta = 0;
 
     float uAlpha, uBeta;
-    if (uQ > uQ_MAX)
-        uQ = uQ_MAX;
+    uQ = CONSTRAINT(uQ, 0, uQ_MAX);
 
     revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
+
+    char sector = getSector(uAlpha, uBeta);
+
+    SVPWM(sector, uAlpha, uBeta);
+}
+
+void setTorque(float uQ, float angle_el)
+{
+
+    uQ = CONSTRAINT(uQ, 0, uQ_MAX);
+
+    angle_el = normalizeAngle(angle_el);
+    float uAlpha, uBeta;
+
+    revParkOperate(0, uQ, angle_el, &uAlpha, &uBeta);
 
     char sector = getSector(uAlpha, uBeta);
 
@@ -175,69 +189,34 @@ void openLoop(float uQ, uint speed, float frequence, uchar polePairs)
 // (PID *pid, float kp, float ki, float kd, bool positiveFB, float outMax, float outMin, float interval)
 void closeSpeedLoop(float currentSpeed, float setSpeed, float theta, float iA, float iB, float iC, float frequence)
 {
-    float iAlpha, iBeta;
-    clarke(iA, iB, iC, &iAlpha, &iBeta);
-    float iD, iQ;
-    park(iAlpha, iBeta, theta, &iD, &iQ);
+    // float iAlpha, iBeta;
+    // clarke(iA, iB, iC, &iAlpha, &iBeta);
+    //  float iD, iQ;
+    // park(iAlpha, iBeta, theta, &iD, &iQ);
 
-    PID speedPID, currentPID;
-    float IqRef, uQ;
-    pidInit(&speedPID, SPEED_KP, SPEED_KI, 0, 10000, uQ_MAX, -uQ_MAX, 1 / frequence);
-    uQ = pidCompute(&speedPID, setSpeed - currentSpeed);
+    // PID speedPID, currentPID;
+    // float IqRef, uQ;
+    // pidInit(&speedPID, SPEED_KP, SPEED_KI, 0, 10000, uQ_MAX, -uQ_MAX, 1 / frequence);
+    // uQ = pidCompute(&speedPID, setSpeed - currentSpeed);
 
     // pidInit(&currentPID, SPEED_KP, SPEED_KI, 0, 0, 0, 0, uQ_MAX, 0);
     // uQ = compute(&currentPID, IqRef, iQ);
 
-    float uAlpha, uBeta;
-    revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
+    // float uAlpha, uBeta;
+    // revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
 
-    char sector = getSector(uAlpha, uBeta);
+    // char sector = getSector(uAlpha, uBeta);
 
-    SVPWM(sector, uAlpha, uBeta);
+    // SVPWM(sector, uAlpha, uBeta);
 }
 
 void closeSpeedLoopSensorless(float speed, float iA, float iB, float iC)
 {
 }
 
-// void vectorsCompute(char sector, float uAlpha, float uBeta, float period, char Udc, float *tFirst, float *tSecond)
-// {
-
-//     float X = FACTOR * A;
-//     float Y = FACTOR * B;
-//     float Z = FACTOR * C;
-
-//     switch (sector)
-//     {
-//     case 1:
-//         *tFirst = -Z;
-//         *tSecond = X;
-//         break;
-//     case 2:
-//         *tFirst = Z;
-//         *tSecond = Y;
-//         break;
-//     case 3:
-//         *tFirst = X;
-//         *tSecond = -Y;
-//         break;
-//     case 4:
-//         *tFirst = -X;
-//         *tSecond = Z;
-//         break;
-
-//     case 5:
-//         *tFirst = -Y;
-//         *tSecond = -Z;
-//         break;
-
-//     case 6:
-//         *tFirst = Y;
-//         *tSecond = -X;
-//         break;
-//     }
-// }
-
-// void pwmGenerate(float tFirst, float tSecond)
-// {
-// }
+void angleLoop()
+{
+    float Sensor_Angle = as5600GetAngle();
+    float Kp = uQ_MAX / 45.0f;
+    setTorque(CONSTRAINT(Kp * (motor_target - DIR * Sensor_Angle) * 180 / PI, -6, 6), _electricalAngle());
+}

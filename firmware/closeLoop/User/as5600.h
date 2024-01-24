@@ -1,7 +1,7 @@
 #ifndef __BSP_AS5600_H
 #define __BSP_AS5600_H
 
-#include "i2c.h"
+#include "common.h"
 
 #define AS5600_I2C_HANDLE hi2c1
 
@@ -21,8 +21,12 @@
 
 #define AS5600_RAW_ANGLE_REGISTER 0x0C
 
+#define DIRECTION -1 // 根据硬件方案，角度值随逆时针旋转减小
+
 void as5600Init(void);
 uint16_t as5600GetRawAngle(void);
 float as5600GetAngle(void);
+float as5600GetAngleWithoutTrack(void);
+float getElectricAngle();
 
 #endif /* __BSP_AS5600_H */

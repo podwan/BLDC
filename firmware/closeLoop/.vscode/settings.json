@@ -6,6 +6,10 @@
         "cmath": "c",
         "pid.h": "c",
         "lowpassfilter.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "xutility": "c",
+        "i2c.h": "c"
     }
 }

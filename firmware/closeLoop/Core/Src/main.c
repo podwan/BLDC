@@ -148,28 +148,19 @@ int main(void)
   HAL_OPAMP_Start(&hopamp1);
   HAL_OPAMP_Start(&hopamp2);
   HAL_OPAMP_Start(&hopamp3);
-  // HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
-  // HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-  // HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
-  // __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_JEOC);
-  // __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_EOC);
-  // __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_JEOC);
-  // HAL_ADCEx_InjectedStart_IT(&hadc1);
-  // HAL_ADCEx_InjectedStart(&hadc2);
-  // TIM1->ARR = 8000 - 1;
-  // TIM1->CCR4 = 8000 - 2;
+  HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+  __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_JEOC);
+  __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_EOC);
+  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_JEOC);
+  HAL_ADCEx_InjectedStart_IT(&hadc1);
+  HAL_ADCEx_InjectedStart(&hadc2);
+  TIM1->ARR = 8000 - 1;
+  TIM1->CCR4 = 8000 - 2;
 
   // HAL_TIM_Base_Start(&htim1);
   // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
-
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-
-  // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-  // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-  // HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-
   // HAL_TIMEx_HallSensor_Start_IT(&htim4);
   as5600Init();
   /* USER CODE END 2 */
@@ -178,15 +169,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    float angle, angle_raw;
+    float angle, angleWithoutTrack;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    angle_raw = as5600GetRawAngle();
+    angleWithoutTrack = as5600GetAngleWithoutTrack();
     angle = as5600GetAngle();
     HAL_Delay(100);
-//  HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
-    printf("angle: %f, angle_raw: %f\n", angle, angle_raw);
+    //  HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
+    printf("angle: %f, angleWithoutTrack: %f\n", angle, angleWithoutTrack);
   }
   /* USER CODE END 3 */
 }
@@ -309,26 +300,26 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
         HallTheta -= 2.0f * PI;
       }
 
-      switch (motorMode)
-      {
-      case OPEN_LOOP:
-        static uint openLoopCnt = 0;
-        if (++openLoopCnt >= 65535)
-        {
-          motorMode = CLOSE_LOOP;
-        }
-        openLoop(5, 300, 20000, POLE_PAIRS);
-        break;
+      // switch (motorMode)
+      // {
+      // case OPEN_LOOP:
+      //   static uint openLoopCnt = 0;
+      //   if (++openLoopCnt >= 65535)
+      //   {
+      //     motorMode = CLOSE_LOOP;
+      //   }
+      openLoop(3, 60);
+      //   break;
 
-      case CLOSE_LOOP:
-        closeSpeedLoop(HallSpeed, 500, HallTheta, Ia, Ib, Ic, 20000);
-        break;
-      }
-      //
-      temp[0] = HallSpeed;
-      temp[1] = HallTheta;
+      // case CLOSE_LOOP:
+      //   closeSpeedLoop(HallSpeed, 500, HallTheta, Ia, Ib, Ic, 20000);
+      //   break;
+      // }
+      // //
+      temp[0] = Ia;
+      temp[1] = Ib;
       memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+      //  HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
     }
   }
 }

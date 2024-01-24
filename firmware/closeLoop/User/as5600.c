@@ -1,5 +1,5 @@
 #include "as5600.h"
-
+#include "i2c.h"
 #define abs(x) ((x) > 0 ? (x) : -(x))
 #define _2PI 6.28318530718
 
@@ -57,4 +57,29 @@ float as5600GetAngle(void)
   angle_data_prev = angle_data;
 
   return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
+}
+
+float as5600GetAngleWithoutTrack(void)
+{
+  return as5600GetRawAngle() * 0.08789f * _PI / 180; // 得到弧度制的角度
+}
+
+
+float zero_electric_angle = 0;
+
+void alignSensor()
+{
+  // int PP = POLE_PAIRS;
+  // int DIR = DIRECTION;
+  // setTorque(3, _3PI_2);
+  // delay(3000);
+  // zero_electric_angle = _electricalAngle();
+  // setTorque(0, _3PI_2);
+  // Serial.print("0电角度：");
+  // Serial.println(zero_electric_angle);
+}
+
+float getElectricAngle()
+{
+  return normalizeAngle((float)(DIRECTION * POLE_PAIRS) * as5600GetAngleWithoutTrack() - zero_electric_angle);
 }

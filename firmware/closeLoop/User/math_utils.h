@@ -1,13 +1,11 @@
 #ifndef FOCUTILS_LIB_H
 #define FOCUTILS_LIB_H
 
-
-
-#define SIGN(a) ( ( (a) < 0 )  ?  -1   : ( (a) > 0 ) )
-#define ROUND(x) ((x)>=0?(long)((x)+0.5f):(long)((x)-0.5f))
-#define CONSTRAINT(amt, low, high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+#define SIGN(a) (((a) < 0) ? -1 : ((a) > 0))
+#define ROUND(x) ((x) >= 0 ? (long)((x) + 0.5f) : (long)((x)-0.5f))
+#define CONSTRAINT(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 #define SQRT(a) (SqrtApprox(a))
-#define ASSERT(a) ( (a) != (NOT_SET) )
+#define ASSERT(a) ((a) != (NOT_SET))
 
 #define _2_SQRT3 1.15470053838f
 #define _SQRT3 1.73205080757f
@@ -23,10 +21,6 @@
 #define _PI_6 0.52359877559f
 
 #define NOT_SET -12345.0
-
-
-
-
 
 float normalizeAngle(float angle);
 float SinApprox(float a);

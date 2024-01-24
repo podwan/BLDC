@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#define K_P  uQ_MAX / 45
+
 typedef struct
 {
     float kp;
