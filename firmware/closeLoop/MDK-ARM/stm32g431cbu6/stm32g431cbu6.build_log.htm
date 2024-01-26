@@ -22,60 +22,31 @@ Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 C:\Users\18575\Desktop\bldc\firmware\closeLoop\MDK-ARM\stm32g431cbu6.uvprojx
-Project File Date:  01/20/2024
+Project File Date:  01/26/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'stm32g431cbu6'
-compiling math_utils.c...
 compiling main.c...
-../User/common.h(23): warning:  #1-D: last line of file ends without a newline
+../User/common.h(24): warning:  #1-D: last line of file ends without a newline
   #endif
 ../User/as5600.h(30): warning:  #1295-D: Deprecated declaration getElectricAngle - give arg types
   float getElectricAngle();
-../Core/Src/main.c(270): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
+../Core/Src/main.c(163): warning:  #188-D: enumerated type mixed with another type
+        recvDataToProcess = 0;
+../Core/Src/main.c(154): warning:  #550-D: variable "angle"  was set but never used
+      float angle, angleWithoutTrack;
+../Core/Src/main.c(154): warning:  #550-D: variable "angleWithoutTrack"  was set but never used
+      float angle, angleWithoutTrack;
+../Core/Src/main.c(247): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
     static uint16_t obsever_cnt;
-../Core/Src/main.c: 3 warnings, 0 errors
-compiling as5600.c...
-..\User\common.h(23): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\as5600.h(30): warning:  #1295-D: Deprecated declaration getElectricAngle - give arg types
-  float getElectricAngle();
-..\User\as5600.c(4): warning:  #47-D: incompatible redefinition of macro "_2PI"  (declared at line 19 of "..\User\math_utils.h")
-  #define _2PI 6.28318530718
-..\User\as5600.c(59): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-    return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
-..\User\as5600.c(85): warning:  #1-D: last line of file ends without a newline
-  }
-..\User\as5600.c: 5 warnings, 0 errors
-compiling foc.c...
-..\User\common.h(23): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\pid.h(25): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\foc.c(219): warning:  #223-D: function "as5600GetAngle" declared implicitly
-      float Sensor_Angle = as5600GetAngle();
-..\User\foc.c(221): warning:  #1-D: last line of file ends without a newline
-  }
-..\User\foc.c(220): warning:  #177-D: variable "Kp"  was declared but never referenced
-      float Kp = 0.133;
-..\User\foc.c: 5 warnings, 0 errors
-compiling lowPassFilter.c...
-..\User\common.h(23): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\lowPassFilter.h(15): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\lowPassFilter.c: 2 warnings, 0 errors
-compiling pid.c...
-..\User\common.h(23): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\pid.h(25): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\User\pid.c: 2 warnings, 0 errors
+../Core/Src/main.c(328): warning:  #188-D: enumerated type mixed with another type
+        recvDataToProcess = 1;
+../Core/Src/main.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=26640 RO-data=1376 RW-data=128 ZI-data=2168  
+Program Size: Code=26176 RO-data=1376 RW-data=128 ZI-data=1944  
 FromELF: creating hex file...
-"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 17 Warning(s).
+"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -99,7 +70,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.5.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Build Time Elapsed:  00:00:10
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

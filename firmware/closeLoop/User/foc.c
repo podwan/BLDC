@@ -153,7 +153,7 @@ speed at rpm/min at rpm/min
 frequence is about the function call frequence
 */
 
-void openLoop(float uQ, uint speed)
+void openSpeedLoop(float uQ, uint speed)
 {
     static float theta, thetaAdd;
     thetaAdd = speed * _2PI / 60.0f / FREQUENCE * POLE_PAIRS;
@@ -214,9 +214,9 @@ void closeSpeedLoopSensorless(float speed, float iA, float iB, float iC)
 {
 }
 
-void angleLoop()
+void closeAngleLoop()
 {
     float Sensor_Angle = as5600GetAngle();
     float Kp = uQ_MAX / 45.0f;
-    setTorque(CONSTRAINT(Kp * (motor_target - DIR * Sensor_Angle) * 180 / PI, -6, 6), _electricalAngle());
+    //setTorque(CONSTRAINT(Kp * (motor_target - DIR * Sensor_Angle) * 180 / _PI, 0, uQ_MAX), _electricalAngle());
 }

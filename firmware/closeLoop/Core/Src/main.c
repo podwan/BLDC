@@ -46,7 +46,7 @@ extern DMA_HandleTypeDef hdma_usart3_tx;
 uint8_t DataB1[32] = "LED1 Toggle\r\n";
 uint8_t DataB2[32] = "LED2 Toggle\r\n";
 uint8_t DataB3[32] = "LED1 and LED2 Open\r\n";
-#define RXBUFFERSIZE 256
+#define RXBUFFERSIZE 32
 char RxBuffer[RXBUFFERSIZE];
 uint8_t aRxBuffer;
 uint8_t Uart1_Rx_Cnt = 0;
@@ -64,6 +64,7 @@ float HallSpeedLast = 0;
 float HallSpeedtest = 0;
 float alpha = 0.3;
 uint8_t HallReadTemp = 0;
+bool recvDataToProcess;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -85,25 +86,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// char data[] = "😂😂😂😂😂😂😂😊😊";
-// void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-// {
-//   if (htim == &htim6)
-//   {
-//     // HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
-
-//     static float theta = 0;
-//     FOC(0, 5, theta);
-
-//     theta += 0.001745329f;
-//     if (theta > 6.2831852f)
-//       theta = 0;
-
-//     temp[0] = theta;
-//     memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-//     HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
-//   }
-// }
 /* USER CODE END 0 */
 
 /**
@@ -159,9 +141,9 @@ int main(void)
   TIM1->ARR = 8000 - 1;
   TIM1->CCR4 = 8000 - 2;
 
-  // HAL_TIM_Base_Start(&htim1);
-  // HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
-  // HAL_TIMEx_HallSensor_Start_IT(&htim4);
+  HAL_TIM_Base_Start(&htim1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+  HAL_TIMEx_HallSensor_Start_IT(&htim4);
   as5600Init();
   /* USER CODE END 2 */
 
@@ -176,8 +158,12 @@ int main(void)
     angleWithoutTrack = as5600GetAngleWithoutTrack();
     angle = as5600GetAngle();
     HAL_Delay(100);
-    //  HAL_UART_Transmit_IT(&huart3, (uint8_t *)data, strlen(data));
-    printf("angle: %f, angleWithoutTrack: %f\n", angle, angleWithoutTrack);
+    if (recvDataToProcess)
+    {
+      recvDataToProcess = 0;
+      printf("%s", RxBuffer);
+      memset(RxBuffer, '\0', sizeof(RxBuffer));
+    }
   }
   /* USER CODE END 3 */
 }
@@ -308,7 +294,7 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
       //   {
       //     motorMode = CLOSE_LOOP;
       //   }
-      openLoop(3, 60);
+      openSpeedLoop(3, 60);
       //   break;
 
       // case CLOSE_LOOP:
@@ -319,7 +305,7 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
       temp[0] = Ia;
       temp[1] = Ib;
       memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-      //  HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+      // HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
     }
   }
 }
@@ -327,7 +313,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(huart);
-  if (Uart1_Rx_Cnt >= 255)
+  if (Uart1_Rx_Cnt >= RXBUFFERSIZE - 1)
   {
     Uart1_Rx_Cnt = 0;
     memset(RxBuffer, 0x00, sizeof(RxBuffer));
@@ -336,6 +322,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   else
   {
     RxBuffer[Uart1_Rx_Cnt++] = aRxBuffer;
+    if (aRxBuffer == '\n')
+    {
+      Uart1_Rx_Cnt = 0;
+      recvDataToProcess = 1;
+    }
     //		Uart1_Rx_Cnt = 0;
     //		memset(RxBuffer,0x00,sizeof(RxBuffer));
   }

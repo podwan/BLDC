@@ -22,6 +22,6 @@ typedef enum
 // char getSector(float uAlpha, float uBeta);
 // void SVPWM(char sector, float uAlpha, float uBeta);
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta);
-void openLoop(float uQ, uint speed);
+void openSpeedLoop(float uQ, uint speed);
 void closeSpeedLoop(float currentSpeed, float setSpeed, float theta, float iA, float iB, float iC, float frequence);
 #endif
