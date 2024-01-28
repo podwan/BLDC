@@ -1495,6 +1495,21 @@
               <FileType>1</FileType>
               <FilePath>..\User\as5600.c</FilePath>
             </File>
+            <File>
+              <FileName>time_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\time_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>bldcMotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bldcMotor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

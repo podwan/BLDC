@@ -10,6 +10,10 @@
         "type_traits": "c",
         "utility": "c",
         "xutility": "c",
-        "i2c.h": "c"
+        "i2c.h": "c",
+        "sensor.h": "c",
+        "time_utils.h": "c",
+        "bldcmotor.h": "c",
+        "foc.h": "c"
     }
 }

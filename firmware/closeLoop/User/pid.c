@@ -2,9 +2,9 @@
 
 void pidInit(PID *pid, float kp, float ki, float kd, float outputRamp, float outMax, float outMin, float dt)
 {
-   pid->kp = kp;
-   pid->kd = kd;
-   pid->ki = ki;
+   pid->P = kp;
+   pid->I = ki;
+   pid->D = kd;
    pid->iTerm = 0;
    pid->errorLast = 0;
    pid->outputLast = 0;
@@ -20,12 +20,12 @@ float pidCompute(PID *pid, float error)
    /*Compute all the working error variables*/
    float output;
 
-   float pTerm = pid->kp * error; // P
+   float pTerm = pid->P * error; // P
 
-   pid->iTerm += pid->ki * (error + pid->errorLast) * 0.5f * pid->dt; // I
+   pid->iTerm += pid->I * (error + pid->errorLast) * 0.5f * pid->dt; // I
    CONSTRAINT(pid->iTerm, pid->outMin, pid->outMax);
 
-   float dTerm = pid->kd * (error - pid->errorLast) / pid->dt; // D
+   float dTerm = pid->D * (error - pid->errorLast) / pid->dt; // D
    /*Compute PID output*/
    output = pTerm + pid->iTerm + dTerm;
    CONSTRAINT(output, pid->outMin, pid->outMax);
@@ -47,9 +47,9 @@ float pidCompute(PID *pid, float error)
    return output;
 }
 
-void setTunings(PID *pid, float Kp, float Ki, float Kd)
-{
-   pid->kp = Kp;
-   pid->ki = Ki;
-   pid->kd = Kd;
-}
+// void setTunings(PID *pid, float Kp, float Ki, float Kd)
+// {
+//    pid->P = Kp;
+//    pid->I = Ki;
+//    pid->D = Kd;
+// }

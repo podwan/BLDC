@@ -42,6 +42,9 @@
 "stm32g431cbu6\math_utils.o"
 "stm32g431cbu6\lowpassfilter.o"
 "stm32g431cbu6\as5600.o"
+"stm32g431cbu6\time_utils.o"
+"stm32g431cbu6\sensor.o"
+"stm32g431cbu6\bldcmotor.o"
 --library_type=microlib --strict --scatter "stm32g431cbu6\stm32g431cbu6.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

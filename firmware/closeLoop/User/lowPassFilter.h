@@ -6,10 +6,10 @@
 typedef struct
 {
     float timeConstant;
-    float dt;
     float outputLast;
+    unsigned long timeStamp;
 } LowPassFilter;
 
-void lowPassFilterInit(LowPassFilter *filter, const float timeConstant, const float dt);
-float lowPassFiltering(LowPassFilter *filter, float input, float dt);
+void lowPassFilterInit(LowPassFilter *filter, const float timeConstant);
+float lowPassFiltering(LowPassFilter *filter, float input);
 #endif

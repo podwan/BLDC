@@ -31,13 +31,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "foc.h"
-#include "as5600.h"
+#include "bldcMotor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define PI 3.14159265358979f
-#define PHASE_SHIFT_ANGLE (float)(220.0f / 360.0f * 2.0f * PI)
+
+#define PHASE_SHIFT_ANGLE (float)(220.0f / 360.0f * 2.0f * _PI)
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -46,8 +46,9 @@ extern DMA_HandleTypeDef hdma_usart3_tx;
 uint8_t DataB1[32] = "LED1 Toggle\r\n";
 uint8_t DataB2[32] = "LED2 Toggle\r\n";
 uint8_t DataB3[32] = "LED1 and LED2 Open\r\n";
-#define RXBUFFERSIZE 32
-char RxBuffer[RXBUFFERSIZE];
+float target;
+char rxBuffer[USART_BUFFER_SIZE];
+char sndBuff[USART_BUFFER_SIZE];
 uint8_t aRxBuffer;
 uint8_t Uart1_Rx_Cnt = 0;
 float Vbus, Ia, Ib, Ic;
@@ -65,6 +66,7 @@ float HallSpeedtest = 0;
 float alpha = 0.3;
 uint8_t HallReadTemp = 0;
 bool recvDataToProcess;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -75,7 +77,7 @@ bool recvDataToProcess;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+void commander_run(void);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -143,8 +145,8 @@ int main(void)
 
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
-  HAL_TIMEx_HallSensor_Start_IT(&htim4);
-  as5600Init();
+  // HAL_TIMEx_HallSensor_Start_IT(&htim4);
+  //as5600Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -155,15 +157,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    angleWithoutTrack = as5600GetAngleWithoutTrack();
-    angle = as5600GetAngle();
-    HAL_Delay(100);
-    if (recvDataToProcess)
-    {
-      recvDataToProcess = 0;
-      printf("%s", RxBuffer);
-      memset(RxBuffer, '\0', sizeof(RxBuffer));
-    }
+    // angleWithoutTrack = as5600GetAngleWithoutTrack();
+    // angle = as5600GetAngle();
+    move(target);
+    loopFOC();
+    commander_run();
   }
   /* USER CODE END 3 */
 }
@@ -211,8 +209,48 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
+//  HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
 /* USER CODE BEGIN 4 */
+/******************************************************************************/
+void commander_run(void)
+{
+  if (recvDataToProcess == 1)
+  {
+    memset(sndBuff, '\0', sizeof(sndBuff));
+    recvDataToProcess = 0;
+    switch (rxBuffer[0])
+    {
+    case 'H':
+      sprintf(sndBuff, "Hello World!\r\n");
+      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)sndBuff, sizeof(sndBuff));
+      break;
+    case 'T': // T6.28
+      // printf("%s", rxBuffer);
+      // printf("target = %.2f\n", atof(rxBuffer + 1));
+      target = atof((const char *)(rxBuffer + 1));
+      sprintf(sndBuff, "RX=%.2f\r\n", target);
+      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)sndBuff, sizeof(sndBuff));
+      break;
+    // case 'P': // P0.5  设置速度环的P参数
+    //   velocityPID.P = atof((const char *)(rxBuffer + 1));
+    //   sprintf(sndBuff, "P=%.2f\r\n", velocityPID.P);
+    //   break;
+    // case 'I': // I0.2  设置速度环的I参数
+    //   velocityPID.I = atof((const char *)(rxBuffer + 1));
+    //   sprintf(sndBuff, "I=%.2f\r\n", velocityPID.I);
+    //   break;
+    // case 'V': // V  读实时速度
+    //   sprintf(sndBuff, "Vel=%.2f\r\n", shaft_velocity);
+    //   break;
+    case 'A': // A  读绝对角度
+      sprintf(sndBuff, "Ang=%.2f\r\n", shaft_angle);
+      break;
+    }
+
+    memset(rxBuffer, '\0', sizeof(rxBuffer));
+  }
+}
+/******************************************************************************/
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -240,7 +278,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
            the HAL_GPIO_EXTI_Callback could be implemented in the user file
    */
 }
-MotorMode motorMode;
+// MotorMode motorMode;
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
 {
   static uint8_t cnt;
@@ -265,7 +303,7 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
         IB_Offset = IB_Offset / 10;
         IC_Offset = IC_Offset / 10;
       }
-      motorMode = OPEN_LOOP;
+      // motorMode = OPEN_LOOP;
     }
     else
     {
@@ -279,33 +317,22 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
       HallTheta = HallTheta + HallThetaAdd;
       if (HallTheta < 0.0f)
       {
-        HallTheta += 2.0f * PI;
+        HallTheta += 2.0f * _PI;
       }
-      else if (HallTheta > (2.0f * PI))
+      else if (HallTheta > (2.0f * _PI))
       {
-        HallTheta -= 2.0f * PI;
+        HallTheta -= 2.0f * _PI;
       }
 
-      // switch (motorMode)
-      // {
-      // case OPEN_LOOP:
-      //   static uint openLoopCnt = 0;
-      //   if (++openLoopCnt >= 65535)
-      //   {
-      //     motorMode = CLOSE_LOOP;
-      //   }
       openSpeedLoop(3, 60);
-      //   break;
+      // closeAngleLoop(target);
 
-      // case CLOSE_LOOP:
-      //   closeSpeedLoop(HallSpeed, 500, HallTheta, Ia, Ib, Ic, 20000);
-      //   break;
-      // }
-      // //
+#if SHOW_RCC_DATA
       temp[0] = Ia;
       temp[1] = Ib;
       memcpy(tempData, (uint8_t *)&temp, sizeof(temp));
-      // HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+#endif
     }
   }
 }
@@ -313,22 +340,22 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(huart);
-  if (Uart1_Rx_Cnt >= RXBUFFERSIZE - 1)
+  if (Uart1_Rx_Cnt >= USART_BUFFER_SIZE - 1)
   {
     Uart1_Rx_Cnt = 0;
-    memset(RxBuffer, 0x00, sizeof(RxBuffer));
-    HAL_UART_Transmit(&huart3, (uint8_t *)"????", 10, 0xFFFF);
+    memset(rxBuffer, 0x00, sizeof(rxBuffer));
+    HAL_UART_Transmit(&huart3, (uint8_t *)"too long\n", 10, 0xFFFF);
   }
   else
   {
-    RxBuffer[Uart1_Rx_Cnt++] = aRxBuffer;
+    rxBuffer[Uart1_Rx_Cnt++] = aRxBuffer;
     if (aRxBuffer == '\n')
     {
       Uart1_Rx_Cnt = 0;
       recvDataToProcess = 1;
     }
     //		Uart1_Rx_Cnt = 0;
-    //		memset(RxBuffer,0x00,sizeof(RxBuffer));
+    //		memset(rxBuffer,0x00,sizeof(rxBuffer));
   }
   HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
   /* NOTE: This function should not be modified, when the callback is needed,
@@ -350,8 +377,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
   if (htim == &htim4)
   {
     HallTemp = HAL_TIM_ReadCapturedValue(&htim4, TIM_CHANNEL_1);
-    HallThetaAdd = (PI / 3) / (HallTemp / 10000000) / 10000;
-    HallSpeed = (PI / 3) / (HallTemp / 10000000) * 30 / (2 * PI);
+    HallThetaAdd = (_PI / 3) / (HallTemp / 10000000) / 10000;
+    HallSpeed = (_PI / 3) / (HallTemp / 10000000) * 30 / (2 * _PI);
     HallReadTemp = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8);
     HallReadTemp |= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7) << 1;
     HallReadTemp |= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) << 2;
@@ -361,31 +388,31 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
     }
     else if (HallReadTemp == 0x04)
     {
-      HallTheta = (PI / 3.0f) + PHASE_SHIFT_ANGLE;
+      HallTheta = (_PI / 3.0f) + PHASE_SHIFT_ANGLE;
     }
     else if (HallReadTemp == 0x06)
     {
-      HallTheta = (PI * 2.0f / 3.0f) + PHASE_SHIFT_ANGLE;
+      HallTheta = (_PI * 2.0f / 3.0f) + PHASE_SHIFT_ANGLE;
     }
     else if (HallReadTemp == 0x02)
     {
-      HallTheta = PI + PHASE_SHIFT_ANGLE;
+      HallTheta = _PI + PHASE_SHIFT_ANGLE;
     }
     else if (HallReadTemp == 0x03)
     {
-      HallTheta = (PI * 4.0f / 3.0f) + PHASE_SHIFT_ANGLE;
+      HallTheta = (_PI * 4.0f / 3.0f) + PHASE_SHIFT_ANGLE;
     }
     else if (HallReadTemp == 0x01)
     {
-      HallTheta = (PI * 5.0f / 3.0f) + PHASE_SHIFT_ANGLE;
+      HallTheta = (_PI * 5.0f / 3.0f) + PHASE_SHIFT_ANGLE;
     }
     if (HallTheta < 0.0f)
     {
-      HallTheta += 2.0f * PI;
+      HallTheta += 2.0f * _PI;
     }
-    else if (HallTheta > (2.0f * PI))
+    else if (HallTheta > (2.0f * _PI))
     {
-      HallTheta -= 2.0f * PI;
+      HallTheta -= 2.0f * _PI;
     }
   }
 

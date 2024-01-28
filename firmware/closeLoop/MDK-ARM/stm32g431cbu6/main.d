@@ -51,5 +51,10 @@ stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 stm32g431cbu6\main.o: ../User/foc.h
 stm32g431cbu6\main.o: ../User/common.h
 stm32g431cbu6\main.o: ../User/math_utils.h
+stm32g431cbu6\main.o: ../User/time_utils.h
+stm32g431cbu6\main.o: ../User/common.h
 stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-stm32g431cbu6\main.o: ../User/as5600.h
+stm32g431cbu6\main.o: ../User/lowPassFilter.h
+stm32g431cbu6\main.o: ../User/pid.h
+stm32g431cbu6\main.o: ../User/sensor.h
+stm32g431cbu6\main.o: ../User/bldcMotor.h

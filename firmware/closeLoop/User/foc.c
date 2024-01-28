@@ -1,17 +1,48 @@
 #include "foc.h"
-// #include "arm_math.h"
-#include "math_utils.h"
-#include <cmath>
-#include "pid.h"
+#include "bldcMotor.h"
+PID velocityPID;
+/******************************************************************************/
+float shaft_angle; //!< current motor angle
+float electrical_angle;
 
-float i, j;
+float current_sp;
+float shaft_velocity_sp;
+float shaft_angle_sp;
+DQVoltage_s voltage;
+DQCurrent_s current;
+
+TorqueControlType torque_controller;
+MotionControlType controller;
+
+float sensor_offset = 0; // 似乎没用
+float zero_electric_angle;
+/******************************************************************************/
+// shaft angle calculation
+float shaftAngle(void)
+{
+    // if no sensor linked return previous value ( for open loop )
+    // if(!sensor) return shaft_angle;
+    return SENSOR_DIRECTION * getAngle() - sensor_offset;
+}
+// shaft velocity calculation
+float shaftVelocity(void)
+{
+    // if no sensor linked return previous value ( for open loop )
+    // if(!sensor) return shaft_velocity;
+    return SENSOR_DIRECTION * lowPassFiltering(&LPF_velocity, getVelocity());
+    // return sensor_direction*getVelocity();
+}
+/******************************************************************************/
+float electricalAngle(void)
+{
+    return normalizeAngle((shaft_angle + sensor_offset) * POLE_PAIRS - zero_electric_angle);
+}
+/******************************************************************************/
 
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta)
 {
-    // iAlpha = (2/3) * (iA - iB / 2 - iC/2);
-    *iAlpha = 0.6666667f * (iA - 0.5f * (iB + iC));
-    // iBeta = (1/sqrt(3)) * (iB - iC);
-    *iBeta = 0.5773502691f * (iB - iC);
+    *iAlpha = (2 / 3) * (iA - iB / 2 - iC / 2);
+    *iBeta = (1 / SQRT(3)) * (iB - iC);
 }
 
 void park(float iAlpha, float iBeta, float theta, float *iD, float *iQ)
@@ -28,10 +59,10 @@ void revParkOperate(float uD, float uQ, float theta, float *uAlpha, float *uBeta
 
 const char sectorRemap[] = {0, 2, 6, 1, 4, 3, 5};
 
-static float A, B, C;
-
-char getSector(float uAlpha, float uBeta)
+void SVPWM(float uAlpha, float uBeta)
 {
+    uchar sector;
+    static float A, B, C;
     A = uBeta;
     B = _SQRT3 / 2.0f * uAlpha - uBeta / 2.0f;
     C = -_SQRT3 / 2.0f * uAlpha - uBeta / 2.0f;
@@ -47,17 +78,12 @@ char getSector(float uAlpha, float uBeta)
     if (C > 0)
         N += 4;
 
-    return sectorRemap[N];
-}
+    sector = sectorRemap[N];
 
-void SVPWM(char sector, float uAlpha, float uBeta)
-{
-    float tFirst = 0, tSecond = 0;
-
-    float X = _SQRT3 * PWM_PERIOD * uBeta / U_DC;
+    float X = _SQRT3 * PWM_PERIOD / U_DC * uBeta;
     float Y = _SQRT3 * PWM_PERIOD / U_DC * (_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
     float Z = _SQRT3 * PWM_PERIOD / U_DC * (-_SQRT3 * uAlpha / 2.0f + uBeta / 2.0f);
-
+    float tFirst = 0, tSecond = 0;
     switch (sector)
     {
     case 1:
@@ -147,30 +173,6 @@ void SVPWM(char sector, float uAlpha, float uBeta)
     // PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
-/*
-parameters:
-speed at rpm/min at rpm/min
-frequence is about the function call frequence
-*/
-
-void openSpeedLoop(float uQ, uint speed)
-{
-    static float theta, thetaAdd;
-    thetaAdd = speed * _2PI / 60.0f / FREQUENCE * POLE_PAIRS;
-    theta += thetaAdd;
-
-    if (theta > 6.2831852f)
-        theta = 0;
-
-    float uAlpha, uBeta;
-    uQ = CONSTRAINT(uQ, 0, uQ_MAX);
-
-    revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
-
-    char sector = getSector(uAlpha, uBeta);
-
-    SVPWM(sector, uAlpha, uBeta);
-}
 
 void setTorque(float uQ, float angle_el)
 {
@@ -182,41 +184,50 @@ void setTorque(float uQ, float angle_el)
 
     revParkOperate(0, uQ, angle_el, &uAlpha, &uBeta);
 
-    char sector = getSector(uAlpha, uBeta);
-
-    SVPWM(sector, uAlpha, uBeta);
+    SVPWM(uAlpha, uBeta);
 }
-// (PID *pid, float kp, float ki, float kd, bool positiveFB, float outMax, float outMin, float interval)
-void closeSpeedLoop(float currentSpeed, float setSpeed, float theta, float iA, float iB, float iC, float frequence)
+void openSpeedLoop(float uQ, uint speed)
 {
-    // float iAlpha, iBeta;
-    // clarke(iA, iB, iC, &iAlpha, &iBeta);
-    //  float iD, iQ;
-    // park(iAlpha, iBeta, theta, &iD, &iQ);
+    static float angle_el, thetaAdd;
+    thetaAdd = speed * _2PI / 60.0f / FREQUENCE * POLE_PAIRS;
+    angle_el += thetaAdd;
 
-    // PID speedPID, currentPID;
-    // float IqRef, uQ;
-    // pidInit(&speedPID, SPEED_KP, SPEED_KI, 0, 10000, uQ_MAX, -uQ_MAX, 1 / frequence);
-    // uQ = pidCompute(&speedPID, setSpeed - currentSpeed);
+    angle_el = normalizeAngle(angle_el);
 
-    // pidInit(&currentPID, SPEED_KP, SPEED_KI, 0, 0, 0, 0, uQ_MAX, 0);
-    // uQ = compute(&currentPID, IqRef, iQ);
-
-    // float uAlpha, uBeta;
-    // revParkOperate(0, uQ, theta, &uAlpha, &uBeta);
-
-    // char sector = getSector(uAlpha, uBeta);
-
-    // SVPWM(sector, uAlpha, uBeta);
+    setTorque(uQ, angle_el);
 }
 
-void closeSpeedLoopSensorless(float speed, float iA, float iB, float iC)
+void setPhaseVoltage(float Uq, float Ud, float angle_el)
 {
-}
+    Uq = CONSTRAINT(Uq, 0, uQ_MAX);
 
-void closeAngleLoop()
+    angle_el = normalizeAngle(angle_el);
+    float uAlpha, uBeta;
+
+    revParkOperate(Ud, Uq, angle_el, &uAlpha, &uBeta);
+    SVPWM(uAlpha, uBeta);
+}
+/******************************************************************************/
+void loopFOC(void)
 {
-    float Sensor_Angle = as5600GetAngle();
-    float Kp = uQ_MAX / 45.0f;
-    //setTorque(CONSTRAINT(Kp * (motor_target - DIR * Sensor_Angle) * 180 / _PI, 0, uQ_MAX), _electricalAngle());
+    if (controller == Type_angle_openloop || controller == Type_velocity_openloop)
+        return;
+
+    shaft_angle = shaftAngle();           // shaft angle
+    electrical_angle = electricalAngle(); // electrical angle - need shaftAngle to be called first
+
+    switch (torque_controller)
+    {
+    case Type_voltage: // no need to do anything really
+        break;
+    case Type_dc_current:
+        break;
+    case Type_foc_current:
+        break;
+    default:
+        printf("MOT: no torque control selected!\r\n");
+        break;
+    }
+    // set the phase voltage - FOC heart function :)
+    setPhaseVoltage(voltage.q, voltage.d, electrical_angle);
 }

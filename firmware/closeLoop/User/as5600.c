@@ -1,18 +1,13 @@
 #include "as5600.h"
 #include "i2c.h"
-#define abs(x) ((x) > 0 ? (x) : -(x))
-#define _2PI 6.28318530718
-
-static float angle_data_prev;      // 上次位置
-static float full_rotation_offset; // 转过的整圈数
 
 void as5600Init(void)
 {
   /* init i2c interface */
 
   /* init var */
-  full_rotation_offset = 0;
-  angle_data_prev = as5600GetRawAngle();
+  //  full_rotation_offset = 0;
+  //  angle_data_prev = as5600GetRawAngle();
 }
 
 static int i2cWrite(uint8_t dev_addr, uint8_t *pData, uint32_t count)
@@ -45,41 +40,27 @@ uint16_t as5600GetRawAngle(void)
   return raw_angle;
 }
 
-float as5600GetAngle(void)
-{
-  float angle_data = as5600GetRawAngle();
-
-  float d_angle = angle_data - angle_data_prev;
-  if (abs(d_angle) > (0.8 * AS5600_RESOLUTION))
-  {
-    full_rotation_offset += (d_angle > 0 ? -_2PI : _2PI);
-  }
-  angle_data_prev = angle_data;
-
-  return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
-}
-
 float as5600GetAngleWithoutTrack(void)
 {
   return as5600GetRawAngle() * 0.08789f * _PI / 180; // 得到弧度制的角度
 }
 
+// float zero_electric_angle = 0;
 
-float zero_electric_angle = 0;
+// void alignSensor()
+//{
+// int PP = POLE_PAIRS;
+// int DIR = DIRECTION;
+// setTorque(3, _3PI_2);
+// delay(3000);
+// zero_electric_angle = _electricalAngle();
+// setTorque(0, _3PI_2);
+// Serial.print("0电角度：");
+// Serial.println(zero_electric_angle);
 
-void alignSensor()
-{
-  // int PP = POLE_PAIRS;
-  // int DIR = DIRECTION;
-  // setTorque(3, _3PI_2);
-  // delay(3000);
-  // zero_electric_angle = _electricalAngle();
-  // setTorque(0, _3PI_2);
-  // Serial.print("0电角度：");
-  // Serial.println(zero_electric_angle);
-}
+//}
 
-float getElectricAngle()
-{
-  return normalizeAngle((float)(DIRECTION * POLE_PAIRS) * as5600GetAngleWithoutTrack() - zero_electric_angle);
-}
+// float getElectricAngle()
+// {
+//   return normalizeAngle((float)(DIRECTION * POLE_PAIRS) * as5600GetAngleWithoutTrack() - zero_electric_angle);
+// }

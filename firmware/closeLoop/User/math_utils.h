@@ -6,6 +6,7 @@
 #define CONSTRAINT(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 #define SQRT(a) (SqrtApprox(a))
 #define ASSERT(a) ((a) != (NOT_SET))
+// #define abs(x) ((x) > 0 ? (x) : -(x))
 
 #define _2_SQRT3 1.15470053838f
 #define _SQRT3 1.73205080757f
@@ -26,6 +27,5 @@ float normalizeAngle(float angle);
 float SinApprox(float a);
 float CosApprox(float a);
 float SqrtApprox(float value);
-
 
 #endif

@@ -41,8 +41,12 @@ stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\foc.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 stm32g431cbu6\foc.o: ..\User\math_utils.h
+stm32g431cbu6\foc.o: ..\User\time_utils.h
+stm32g431cbu6\foc.o: ..\User\common.h
 stm32g431cbu6\foc.o: ../Core/Inc/main.h
 stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
-stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+stm32g431cbu6\foc.o: ..\User\lowPassFilter.h
 stm32g431cbu6\foc.o: ..\User\pid.h
+stm32g431cbu6\foc.o: ..\User\sensor.h
+stm32g431cbu6\foc.o: ..\User\bldcMotor.h
