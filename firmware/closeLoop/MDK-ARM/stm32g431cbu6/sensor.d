@@ -49,5 +49,8 @@ stm32g431cbu6\sensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 stm32g431cbu6\sensor.o: ..\User\lowPassFilter.h
 stm32g431cbu6\sensor.o: ..\User\pid.h
 stm32g431cbu6\sensor.o: ..\User\sensor.h
+stm32g431cbu6\sensor.o: ../Core/Inc/tim.h
+stm32g431cbu6\sensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\sensor.o: ..\User\foc.h
 stm32g431cbu6\sensor.o: ..\User\as5600.h
 stm32g431cbu6\sensor.o: ..\User\bldcMotor.h

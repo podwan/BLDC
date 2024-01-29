@@ -44,23 +44,3 @@ float as5600GetAngleWithoutTrack(void)
 {
   return as5600GetRawAngle() * 0.08789f * _PI / 180; // 得到弧度制的角度
 }
-
-// float zero_electric_angle = 0;
-
-// void alignSensor()
-//{
-// int PP = POLE_PAIRS;
-// int DIR = DIRECTION;
-// setTorque(3, _3PI_2);
-// delay(3000);
-// zero_electric_angle = _electricalAngle();
-// setTorque(0, _3PI_2);
-// Serial.print("0电角度：");
-// Serial.println(zero_electric_angle);
-
-//}
-
-// float getElectricAngle()
-// {
-//   return normalizeAngle((float)(DIRECTION * POLE_PAIRS) * as5600GetAngleWithoutTrack() - zero_electric_angle);
-// }

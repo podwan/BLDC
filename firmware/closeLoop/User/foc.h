@@ -73,7 +73,7 @@ extern DQVoltage_s voltage;
 extern DQCurrent_s current;
 
 extern float sensor_offset;
-extern float zero_electric_angle;
+
 /******************************************************************************/
 float shaftAngle(void);
 float shaftVelocity(void);
@@ -82,7 +82,7 @@ float electricalAngle(void);
 
 void closeAngleLoop(float targetAngle);
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta);
-void openSpeedLoop(float uQ, uint speed);
 void closeSpeedLoop(float currentSpeed, float setSpeed, float theta, float iA, float iB, float iC, float frequence);
 void loopFOC(void);
+void setPhaseVoltage(float Uq, float Ud, float angle_el);
 #endif

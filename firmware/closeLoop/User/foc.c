@@ -15,7 +15,9 @@ TorqueControlType torque_controller;
 MotionControlType controller;
 
 float sensor_offset = 0; // 似乎没用
-float zero_electric_angle;
+
+
+
 /******************************************************************************/
 // shaft angle calculation
 float shaftAngle(void)
@@ -35,7 +37,7 @@ float shaftVelocity(void)
 /******************************************************************************/
 float electricalAngle(void)
 {
-    return normalizeAngle((shaft_angle + sensor_offset) * POLE_PAIRS - zero_electric_angle);
+    return normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
 }
 /******************************************************************************/
 
@@ -189,7 +191,7 @@ void setTorque(float uQ, float angle_el)
 void openSpeedLoop(float uQ, uint speed)
 {
     static float angle_el, thetaAdd;
-    thetaAdd = speed * _2PI / 60.0f / FREQUENCE * POLE_PAIRS;
+    thetaAdd = speed * _2PI / 60.0f / FREQUENCE * pole_pairs;
     angle_el += thetaAdd;
 
     angle_el = normalizeAngle(angle_el);
@@ -206,28 +208,4 @@ void setPhaseVoltage(float Uq, float Ud, float angle_el)
 
     revParkOperate(Ud, Uq, angle_el, &uAlpha, &uBeta);
     SVPWM(uAlpha, uBeta);
-}
-/******************************************************************************/
-void loopFOC(void)
-{
-    if (controller == Type_angle_openloop || controller == Type_velocity_openloop)
-        return;
-
-    shaft_angle = shaftAngle();           // shaft angle
-    electrical_angle = electricalAngle(); // electrical angle - need shaftAngle to be called first
-
-    switch (torque_controller)
-    {
-    case Type_voltage: // no need to do anything really
-        break;
-    case Type_dc_current:
-        break;
-    case Type_foc_current:
-        break;
-    default:
-        printf("MOT: no torque control selected!\r\n");
-        break;
-    }
-    // set the phase voltage - FOC heart function :)
-    setPhaseVoltage(voltage.q, voltage.d, electrical_angle);
 }

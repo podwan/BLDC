@@ -49,3 +49,6 @@ stm32g431cbu6\lowpassfilter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 stm32g431cbu6\lowpassfilter.o: ..\User\lowPassFilter.h
 stm32g431cbu6\lowpassfilter.o: ..\User\pid.h
 stm32g431cbu6\lowpassfilter.o: ..\User\sensor.h
+stm32g431cbu6\lowpassfilter.o: ../Core/Inc/tim.h
+stm32g431cbu6\lowpassfilter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\lowpassfilter.o: ..\User\foc.h

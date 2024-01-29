@@ -49,3 +49,6 @@ stm32g431cbu6\time_utils.o: ..\User\lowPassFilter.h
 stm32g431cbu6\time_utils.o: ..\User\common.h
 stm32g431cbu6\time_utils.o: ..\User\pid.h
 stm32g431cbu6\time_utils.o: ..\User\sensor.h
+stm32g431cbu6\time_utils.o: ../Core/Inc/tim.h
+stm32g431cbu6\time_utils.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\time_utils.o: ..\User\foc.h

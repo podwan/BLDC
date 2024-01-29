@@ -21,30 +21,25 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
 Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
-C:\Users\18575\Desktop\bldc\firmware\closeLoop\MDK-ARM\stm32g431cbu6.uvprojx
+C:\Users\18575\Desktop\BLDC\firmware\closeLoop\MDK-ARM\stm32g431cbu6.uvprojx
 Project File Date:  01/28/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'stm32g431cbu6'
 compiling bldcMotor.c...
-compiling foc.c...
 compiling main.c...
-../Core/Src/main.c(156): warning:  #177-D: variable "angle"  was declared but never referenced
-      float angle, angleWithoutTrack;
-../Core/Src/main.c(156): warning:  #177-D: variable "angleWithoutTrack"  was declared but never referenced
-      float angle, angleWithoutTrack;
-../Core/Src/main.c(220): warning:  #188-D: enumerated type mixed with another type
+../Core/Src/main.c(229): warning:  #188-D: enumerated type mixed with another type
       recvDataToProcess = 0;
-../Core/Src/main.c(285): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
+../Core/Src/main.c(294): warning:  #177-D: variable "obsever_cnt"  was declared but never referenced
     static uint16_t obsever_cnt;
-../Core/Src/main.c(355): warning:  #188-D: enumerated type mixed with another type
+../Core/Src/main.c(354): warning:  #188-D: enumerated type mixed with another type
         recvDataToProcess = 1;
-../Core/Src/main.c: 5 warnings, 0 errors
+../Core/Src/main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=31516 RO-data=1440 RW-data=180 ZI-data=2436  
+Program Size: Code=32008 RO-data=1440 RW-data=188 ZI-data=2476  
 FromELF: creating hex file...
-"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 5 Warning(s).
+"stm32g431cbu6\stm32g431cbu6.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -68,7 +63,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.5.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Build Time Elapsed:  00:00:06
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

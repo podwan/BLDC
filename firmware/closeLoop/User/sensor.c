@@ -2,6 +2,9 @@
 #include "as5600.h"
 #include "bldcMotor.h"
 
+Direction sensor_direction;
+int pole_pairs;
+float zero_electric_angle;
 /******************************************************************************/
 long cpr;
 long velocity_calc_timestamp; // 速度计时，用于计算速度
@@ -142,3 +145,86 @@ float getVelocity(void)
 
 //     return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
 // }
+
+/******************************************************************************/
+int alignSensor(void)
+{
+    long i;
+    float angle;
+    float mid_angle, end_angle;
+    float moved;
+
+    printf("MOT: Align sensor.\r\n");
+
+    if (sensor_direction == UNKNOWN) // 没有设置，需要检测
+    {
+        // find natural direction
+        // move one electrical revolution forward
+        for (i = 0; i <= 500; i++)
+        {
+            angle = _3PI_2 + _2PI * i / 500.0f;
+            setPhaseVoltage(voltage_sensor_align, 0, angle);
+            delay(2);
+        }
+        mid_angle = getAngle();
+
+        for (i = 500; i >= 0; i--)
+        {
+            angle = _3PI_2 + _2PI * i / 500.0f;
+            setPhaseVoltage(voltage_sensor_align, 0, angle);
+            delay(2);
+        }
+        end_angle = getAngle();
+        setPhaseVoltage(0, 0, 0);
+        delay(200);
+
+        printf("mid_angle=%.4f\r\n", mid_angle);
+        printf("end_angle=%.4f\r\n", end_angle);
+
+        moved = fabs(mid_angle - end_angle);
+        if ((mid_angle == end_angle) || (moved < 0.01f)) // 相等或者几乎没有动
+        {
+            printf("MOT: Failed to notice movement loop222.\r\n");
+            M0_Disable; // 电机检测不正常，关闭驱动
+            return 0;
+        }
+        else if (mid_angle < end_angle)
+        {
+            printf("MOT: sensor_direction==CCW\r\n");
+            sensor_direction = CCW;
+        }
+        else
+        {
+            printf("MOT: sensor_direction==CW\r\n");
+            sensor_direction = CW;
+        }
+
+        printf("MOT: PP check: ");                  // 计算Pole_Pairs
+        if (fabs(moved * pole_pairs - _2PI) > 0.5f) // 0.5 is arbitrary number it can be lower or higher!
+        {
+            printf("fail - estimated pp:");
+            pole_pairs = _2PI / moved + 0.5f; // 浮点数转整形，四舍五入
+            printf("%d\r\n", pole_pairs);
+        }
+        else
+            printf("OK!\r\n");
+    }
+    else
+        printf("MOT: Skip dir calib.\r\n");
+
+    if (zero_electric_angle == 0) // 没有设置，需要检测
+    {
+        setPhaseVoltage(voltage_sensor_align, 0, _3PI_2); // 计算零点偏移角度
+        delay(700);
+        zero_electric_angle = normalizeAngle(_electricalAngle(sensor_direction * getAngle(), pole_pairs));
+        delay(20);
+        printf("MOT: Zero elec. angle:");
+        printf("%.4f\r\n", zero_electric_angle);
+        setPhaseVoltage(0, 0, 0);
+        delay(200);
+    }
+    else
+        printf("MOT: Skip offset calib.\r\n");
+
+    return 1;
+}

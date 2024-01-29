@@ -49,4 +49,7 @@ stm32g431cbu6\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 stm32g431cbu6\as5600.o: ..\User\lowPassFilter.h
 stm32g431cbu6\as5600.o: ..\User\pid.h
 stm32g431cbu6\as5600.o: ..\User\sensor.h
+stm32g431cbu6\as5600.o: ../Core/Inc/tim.h
+stm32g431cbu6\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\as5600.o: ..\User\foc.h
 stm32g431cbu6\as5600.o: ../Core/Inc/i2c.h

@@ -9,8 +9,10 @@
 #include "lowPassFilter.h"
 #include "pid.h"
 #include "sensor.h"
+#include "tim.h"
+#include <math.h>
+#include "foc.h"
 
-#define POLE_PAIRS 7
 #define PWM_PERIOD 8000.0f // PWM period * 2
 #define U_DC 12.0f
 #define uQ_MAX (U_DC / _SQRT3)

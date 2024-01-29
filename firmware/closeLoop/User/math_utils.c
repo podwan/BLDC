@@ -52,6 +52,12 @@ float normalizeAngle(float angle)
     return a >= 0 ? a : (a + _2PI);
 }
 
+/***************************************************************************/
+// Electrical angle calculation
+float _electricalAngle(float shaft_angle, int pole_pairs)
+{
+    return (shaft_angle * pole_pairs);
+}
 // Square root approximation function using
 // https://reprap.org/forum/read.php?147,219210
 // https://en.wikipedia.org/wiki/Fast_inverse_square_root

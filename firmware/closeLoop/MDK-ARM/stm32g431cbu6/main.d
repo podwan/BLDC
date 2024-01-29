@@ -57,4 +57,6 @@ stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 stm32g431cbu6\main.o: ../User/lowPassFilter.h
 stm32g431cbu6\main.o: ../User/pid.h
 stm32g431cbu6\main.o: ../User/sensor.h
+stm32g431cbu6\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\main.o: ../User/foc.h
 stm32g431cbu6\main.o: ../User/bldcMotor.h

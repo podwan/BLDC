@@ -49,3 +49,6 @@ stm32g431cbu6\pid.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 stm32g431cbu6\pid.o: ..\User\lowPassFilter.h
 stm32g431cbu6\pid.o: ..\User\pid.h
 stm32g431cbu6\pid.o: ..\User\sensor.h
+stm32g431cbu6\pid.o: ../Core/Inc/tim.h
+stm32g431cbu6\pid.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+stm32g431cbu6\pid.o: ..\User\foc.h

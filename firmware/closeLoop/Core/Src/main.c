@@ -46,7 +46,7 @@ extern DMA_HandleTypeDef hdma_usart3_tx;
 uint8_t DataB1[32] = "LED1 Toggle\r\n";
 uint8_t DataB2[32] = "LED2 Toggle\r\n";
 uint8_t DataB3[32] = "LED1 and LED2 Open\r\n";
-float target;
+
 char rxBuffer[USART_BUFFER_SIZE];
 char sndBuff[USART_BUFFER_SIZE];
 uint8_t aRxBuffer;
@@ -138,28 +138,37 @@ int main(void)
   __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_JEOC);
   __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_EOC);
   __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_JEOC);
-  HAL_ADCEx_InjectedStart_IT(&hadc1);
-  HAL_ADCEx_InjectedStart(&hadc2);
+  // HAL_ADCEx_InjectedStart_IT(&hadc1);
+  // HAL_ADCEx_InjectedStart(&hadc2);
   TIM1->ARR = 8000 - 1;
   TIM1->CCR4 = 8000 - 2;
 
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
-  // HAL_TIMEx_HallSensor_Start_IT(&htim4);
-  //as5600Init();
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  motorInit();
+  Motor_initFOC(0, UNKNOWN); //(0,UNKNOWN);  //(1.1,CW); 第一次先获得偏移角和方向，填入代码编译后再下载，以后可以跳过零点校准
+  printf("Motor ready.\r\n");
+
   while (1)
   {
-    float angle, angleWithoutTrack;
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // angleWithoutTrack = as5600GetAngleWithoutTrack();
-    // angle = as5600GetAngle();
+
     move(target);
+
     loopFOC();
     commander_run();
   }
@@ -313,18 +322,8 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
       Ia = (adc1_in1 - IA_Offset) * 0.02197f;
       Ib = (adc1_in2 - IB_Offset) * 0.02197f;
       Ic = (adc1_in3 - IC_Offset) * 0.02197f; // 0.02197265625
-                                              // open loop
-      HallTheta = HallTheta + HallThetaAdd;
-      if (HallTheta < 0.0f)
-      {
-        HallTheta += 2.0f * _PI;
-      }
-      else if (HallTheta > (2.0f * _PI))
-      {
-        HallTheta -= 2.0f * _PI;
-      }
 
-      openSpeedLoop(3, 60);
+      // openSpeedLoop(3, 60);
       // closeAngleLoop(target);
 
 #if SHOW_RCC_DATA
