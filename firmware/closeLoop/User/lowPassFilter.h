@@ -12,4 +12,5 @@ typedef struct
 extern LowPassFilter LPF_velocity;
 void lowPassFilterInit(LowPassFilter *filter, const float timeConstant);
 float lowPassFiltering(LowPassFilter *filter, float input);
+
 #endif

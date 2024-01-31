@@ -30,7 +30,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+// osThreadId_t ctrlLoopTaskHandle;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -54,6 +54,21 @@ const osThreadAttr_t defaultTask_attributes = {
     .priority = (osPriority_t)osPriorityNormal,
     .stack_size = 128 * 4};
 
+// void ThreadCtrlLoop(void *argument)
+// {
+//   motorInit();
+
+//   printf("Motor ready.\r\n");
+
+//   for (;;)
+//   {
+//     // Suspended here until got Notification.
+//     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+//     move(target);
+//     loopFOC();
+//     commander_run();
+//   }
+// }
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
@@ -95,7 +110,13 @@ void MX_FREERTOS_Init(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+  // const osThreadAttr_t controlLoopTask_attributes = {
+  //     .name = "ControlLoopTask",
+  //     .priority = (osPriority_t)osPriorityNormal,
+  //     .stack_size = 128 * 4};
+
+  // ctrlLoopTaskHandle = osThreadNew(ThreadCtrlLoop, NULL, &controlLoopTask_attributes);
+  // HAL_TIM_Base_Start_IT(&htim6);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

@@ -17,12 +17,13 @@ void ThreadCtrlLoop(void *argument)
         commander_run();
     }
 }
-
+// .priority = (osPriority_t)osPriorityNormal,
+// .stack_size = 128 * 4};
 void userMain()
 {
     const osThreadAttr_t controlLoopTask_attributes = {
         .name = "ControlLoopTask",
-        .stack_size = 4096,
+        .stack_size = 256 * 4,
         .priority = (osPriority_t)osPriorityRealtime, // robot control thread is critical, should be the highest
     };
     ctrlLoopTaskHandle = osThreadNew(ThreadCtrlLoop, NULL, &controlLoopTask_attributes);
@@ -37,7 +38,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         // Wake & invoke thread IMMEDIATELY.
         // vTaskNotifyGiveFromISR(TaskHandle_t(ctrlLoopTaskHandle), &xHigherPriorityTaskWoken);
-       // vTaskNotifyGiveFromISR(ctrlLoopTaskHandle, &xHigherPriorityTaskWoken);
+        vTaskNotifyGiveFromISR(ctrlLoopTaskHandle, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }

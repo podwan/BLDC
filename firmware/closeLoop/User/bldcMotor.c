@@ -17,7 +17,6 @@ static float angleOpenloop(float target_angle);
 void motorInit(void)
 {
     lowPassFilterInit(&LPF_velocity, 0.02f);
-    MagneticSensor_Init(0, UNKNOWN);
 
     voltage_sensor_align = 2; // V 航模电机设置的值小一点比如0.5-1，云台电机设置的大一点比如2-3
 
@@ -42,6 +41,8 @@ void motorInit(void)
 
     if (voltage_sensor_align > voltage_limit)
         voltage_sensor_align = voltage_limit;
+
+    MagneticSensor_Init(0, UNKNOWN);
 }
 
 void move(float new_target)
