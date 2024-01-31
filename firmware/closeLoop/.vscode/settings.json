@@ -16,6 +16,13 @@
         "bldcmotor.h": "c",
         "foc.h": "c",
         "math_utils.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "usermain.h": "c",
+        "comm.h": "c",
+        "tim.h": "c",
+        "task.h": "c",
+        "cmsis_os.h": "c",
+        "math.h": "c",
+        "freertos.h": "c"
     }
 }

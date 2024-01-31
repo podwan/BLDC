@@ -23,7 +23,7 @@
 
 #define NOT_SET -12345.0
 
-float normalizeAngle(float angle);
+float _normalizeAngle(float angle);
 float SinApprox(float a);
 float CosApprox(float a);
 float SqrtApprox(float value);

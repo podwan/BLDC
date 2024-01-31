@@ -1,7 +1,7 @@
 #ifndef __BSP_AS5600_H
 #define __BSP_AS5600_H
 
-#include "common.h"
+#include "userMain.h"
 
 #define AS5600_I2C_HANDLE hi2c1
 

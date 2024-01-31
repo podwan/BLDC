@@ -1,7 +1,7 @@
 #ifndef TIME_UTILS_H
 #define TIME_UTILS_H
 
-#include "common.h"
+#include "userMain.h"
 
 void delay(uint32_t ms);
 void delayMicroSeconds(uint32_t us);

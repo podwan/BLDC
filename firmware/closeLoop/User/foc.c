@@ -1,6 +1,6 @@
 #include "foc.h"
 #include "bldcMotor.h"
-PID velocityPID;
+
 /******************************************************************************/
 float shaft_angle; //!< current motor angle
 float electrical_angle;
@@ -15,8 +15,6 @@ TorqueControlType torque_controller;
 MotionControlType controller;
 
 float sensor_offset = 0; // 似乎没用
-
-
 
 /******************************************************************************/
 // shaft angle calculation
@@ -37,7 +35,7 @@ float shaftVelocity(void)
 /******************************************************************************/
 float electricalAngle(void)
 {
-    return normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
+    return _normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
 }
 /******************************************************************************/
 
@@ -172,40 +170,17 @@ void SVPWM(float uAlpha, float uBeta)
     temp[3] = pwm2Duty;
     temp[4] = pwm3Duty;
 
-    // PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
-}
-
-void setTorque(float uQ, float angle_el)
-{
-
-    uQ = CONSTRAINT(uQ, 0, uQ_MAX);
-
-    angle_el = normalizeAngle(angle_el);
-    float uAlpha, uBeta;
-
-    revParkOperate(0, uQ, angle_el, &uAlpha, &uBeta);
-
-    SVPWM(uAlpha, uBeta);
-}
-void openSpeedLoop(float uQ, uint speed)
-{
-    static float angle_el, thetaAdd;
-    thetaAdd = speed * _2PI / 60.0f / FREQUENCE * pole_pairs;
-    angle_el += thetaAdd;
-
-    angle_el = normalizeAngle(angle_el);
-
-    setTorque(uQ, angle_el);
 }
 
 void setPhaseVoltage(float Uq, float Ud, float angle_el)
 {
     Uq = CONSTRAINT(Uq, 0, uQ_MAX);
 
-    angle_el = normalizeAngle(angle_el);
+    angle_el = _normalizeAngle(angle_el);
     float uAlpha, uBeta;
 
     revParkOperate(Ud, Uq, angle_el, &uAlpha, &uBeta);
     SVPWM(uAlpha, uBeta);
 }
+

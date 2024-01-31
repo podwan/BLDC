@@ -40,3 +40,12 @@ stm32g431cbu6\stm32g4xx_it.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_
 stm32g431cbu6\stm32g4xx_it.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 stm32g431cbu6\stm32g4xx_it.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 stm32g431cbu6\stm32g4xx_it.o: ../Core/Inc/stm32g4xx_it.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+stm32g431cbu6\stm32g4xx_it.o: ../Core/Inc/FreeRTOSConfig.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+stm32g431cbu6\stm32g4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h

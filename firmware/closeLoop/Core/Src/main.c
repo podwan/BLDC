@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "adc.h"
 #include "dma.h"
 #include "i2c.h"
@@ -43,29 +44,14 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 extern DMA_HandleTypeDef hdma_usart3_tx;
-uint8_t DataB1[32] = "LED1 Toggle\r\n";
-uint8_t DataB2[32] = "LED2 Toggle\r\n";
-uint8_t DataB3[32] = "LED1 and LED2 Open\r\n";
 
-char rxBuffer[USART_BUFFER_SIZE];
-char sndBuff[USART_BUFFER_SIZE];
 uint8_t aRxBuffer;
 uint8_t Uart1_Rx_Cnt = 0;
 float Vbus, Ia, Ib, Ic;
 uint16_t IA_Offset, IB_Offset, IC_Offset;
 uint16_t adc1_in1, adc1_in2, adc1_in3, Vpoten, adc_vbus;
 uint8_t ADC_offset = 0;
-float temp[5];
-uint8_t tempData[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x80, 0x7F};
-float HallTemp = 0;
-float HallThetaAdd = 0;
-float HallTheta = 0;
-float HallSpeed = 0;
-float HallSpeedLast = 0;
-float HallSpeedtest = 0;
 float alpha = 0.3;
-uint8_t HallReadTemp = 0;
-bool recvDataToProcess;
 
 /* USER CODE END PD */
 
@@ -77,11 +63,12 @@ bool recvDataToProcess;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-void commander_run(void);
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -128,6 +115,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM4_Init();
   MX_I2C1_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   HAL_OPAMP_Start(&hopamp1);
   HAL_OPAMP_Start(&hopamp2);
@@ -151,14 +139,20 @@ int main(void)
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+
+
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  osKernelInitialize(); /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-  motorInit();
-  Motor_initFOC(0, UNKNOWN); //(0,UNKNOWN);  //(1.1,CW); 第一次先获得偏移角和方向，填入代码编译后再下载，以后可以跳过零点校准
-  printf("Motor ready.\r\n");
 
   while (1)
   {
@@ -166,11 +160,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    move(target);
-
-    loopFOC();
-    commander_run();
   }
   /* USER CODE END 3 */
 }
@@ -218,47 +207,10 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-//  HAL_UART_Transmit_DMA(&huart3, (uint8_t *)tempData, 6 * 4);
+
 /* USER CODE BEGIN 4 */
 /******************************************************************************/
-void commander_run(void)
-{
-  if (recvDataToProcess == 1)
-  {
-    memset(sndBuff, '\0', sizeof(sndBuff));
-    recvDataToProcess = 0;
-    switch (rxBuffer[0])
-    {
-    case 'H':
-      sprintf(sndBuff, "Hello World!\r\n");
-      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)sndBuff, sizeof(sndBuff));
-      break;
-    case 'T': // T6.28
-      // printf("%s", rxBuffer);
-      // printf("target = %.2f\n", atof(rxBuffer + 1));
-      target = atof((const char *)(rxBuffer + 1));
-      sprintf(sndBuff, "RX=%.2f\r\n", target);
-      HAL_UART_Transmit_DMA(&huart3, (uint8_t *)sndBuff, sizeof(sndBuff));
-      break;
-    // case 'P': // P0.5  设置速度环的P参数
-    //   velocityPID.P = atof((const char *)(rxBuffer + 1));
-    //   sprintf(sndBuff, "P=%.2f\r\n", velocityPID.P);
-    //   break;
-    // case 'I': // I0.2  设置速度环的I参数
-    //   velocityPID.I = atof((const char *)(rxBuffer + 1));
-    //   sprintf(sndBuff, "I=%.2f\r\n", velocityPID.I);
-    //   break;
-    // case 'V': // V  读实时速度
-    //   sprintf(sndBuff, "Vel=%.2f\r\n", shaft_velocity);
-    //   break;
-    case 'A': // A  读绝对角度
-      sprintf(sndBuff, "Ang=%.2f\r\n", shaft_angle);
-      break;
-    }
 
-    memset(rxBuffer, '\0', sizeof(rxBuffer));
-  }
-}
 /******************************************************************************/
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -351,7 +303,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     if (aRxBuffer == '\n')
     {
       Uart1_Rx_Cnt = 0;
-      recvDataToProcess = 1;
+      setUartRecvDone();
     }
     //		Uart1_Rx_Cnt = 0;
     //		memset(rxBuffer,0x00,sizeof(rxBuffer));
@@ -370,55 +322,7 @@ int fputc(int ch, FILE *f)
   return ch;
 }
 
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{ /* Prevent unused argument(s) compilation warning */
-  UNUSED(htim);
-  if (htim == &htim4)
-  {
-    HallTemp = HAL_TIM_ReadCapturedValue(&htim4, TIM_CHANNEL_1);
-    HallThetaAdd = (_PI / 3) / (HallTemp / 10000000) / 10000;
-    HallSpeed = (_PI / 3) / (HallTemp / 10000000) * 30 / (2 * _PI);
-    HallReadTemp = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8);
-    HallReadTemp |= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7) << 1;
-    HallReadTemp |= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) << 2;
-    if (HallReadTemp == 0x05)
-    {
-      HallTheta = 0.0f + PHASE_SHIFT_ANGLE;
-    }
-    else if (HallReadTemp == 0x04)
-    {
-      HallTheta = (_PI / 3.0f) + PHASE_SHIFT_ANGLE;
-    }
-    else if (HallReadTemp == 0x06)
-    {
-      HallTheta = (_PI * 2.0f / 3.0f) + PHASE_SHIFT_ANGLE;
-    }
-    else if (HallReadTemp == 0x02)
-    {
-      HallTheta = _PI + PHASE_SHIFT_ANGLE;
-    }
-    else if (HallReadTemp == 0x03)
-    {
-      HallTheta = (_PI * 4.0f / 3.0f) + PHASE_SHIFT_ANGLE;
-    }
-    else if (HallReadTemp == 0x01)
-    {
-      HallTheta = (_PI * 5.0f / 3.0f) + PHASE_SHIFT_ANGLE;
-    }
-    if (HallTheta < 0.0f)
-    {
-      HallTheta += 2.0f * _PI;
-    }
-    else if (HallTheta > (2.0f * _PI))
-    {
-      HallTheta -= 2.0f * _PI;
-    }
-  }
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_TIM_IC_CaptureCallback could be implemented in the user file
-   */
-}
 /* USER CODE END 4 */
 
 /**

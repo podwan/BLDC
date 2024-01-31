@@ -46,7 +46,7 @@ float CosApprox(float a)
     return SinApprox(aSin);
 }
 // 归一化角度到 [0,2PI]
-float normalizeAngle(float angle)
+float _normalizeAngle(float angle)
 {
     float a = fmod(angle, _2PI);
     return a >= 0 ? a : (a + _2PI);

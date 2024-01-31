@@ -667,12 +667,12 @@ ARM Macro Assembler    Page 11
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
 interwork --depend=stm32g431cbu6\startup_stm32g431xx.d -ostm32g431cbu6\startup_
-stm32g431xx.o -I.\RTE\_stm32g431cbu6 -IC:\Users\18575\AppData\Local\Arm\Packs\A
-RM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\18575\AppData\Local\Arm\Packs\Keil
-\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include --predefine="__M
-ICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SET
-A 1" --predefine="STM32G431xx SETA 1" --predefine="_RTE_ SETA 1" --list=startup
-_stm32g431xx.lst startup_stm32g431xx.s
+stm32g431xx.o -I..\Core\Inc -I.\RTE\_stm32g431cbu6 -IC:\Users\18575\AppData\Loc
+al\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\18575\AppData\Local\
+Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include --
+predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 536" --predef
+ine="_RTE_ SETA 1" --predefine="STM32G431xx SETA 1" --predefine="_RTE_ SETA 1" 
+--list=startup_stm32g431xx.lst startup_stm32g431xx.s
 
 
 

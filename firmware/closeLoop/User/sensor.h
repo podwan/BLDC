@@ -1,7 +1,7 @@
 #ifndef __SENSOR_H
 #define __SENSOR_H
 
-#include "common.h"
+#include "userMain.h"
 #define SENSOR_DIRECTION -1 // 根据硬件方案，角度值随逆时针旋转减小
 /******************************************************************************/
 #define AS5600_CPR 4096    // 12bit
@@ -25,8 +25,9 @@ extern Direction sensor_direction;
 extern int pole_pairs;
 extern float zero_electric_angle;
 /******************************************************************************/
-void MagneticSensor_Init(void);
+void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction);
 float getAngle(void);
 float getVelocity(void);
+int alignSensor(void);
 /******************************************************************************/
 #endif

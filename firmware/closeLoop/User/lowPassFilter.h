@@ -1,7 +1,7 @@
 #ifndef __LOW_PASS_FILTER_H
 #define __LOW_PASS_FILTER_H
 
-#include "common.h"
+#include "userMain.h"
 
 typedef struct
 {
@@ -9,7 +9,7 @@ typedef struct
     float outputLast;
     unsigned long timeStamp;
 } LowPassFilter;
-
+extern LowPassFilter LPF_velocity;
 void lowPassFilterInit(LowPassFilter *filter, const float timeConstant);
 float lowPassFiltering(LowPassFilter *filter, float input);
 #endif

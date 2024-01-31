@@ -15,7 +15,7 @@ float full_rotation_offset;   // 角度累加
 uint16_t getRawCount(void);
 /******************************************************************************/
 // 初始化三种SPI接口的编码器的参数, 初始化I2C接口或者SPI接口
-void MagneticSensor_Init(void)
+void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction)
 {
 #if AS5600
     cpr = AS5600_CPR;
@@ -49,7 +49,26 @@ void MagneticSensor_Init(void)
     full_rotation_offset = 0;
     velocity_calc_timestamp = micros();
     delay(5);
-    angle_prev = getAngle();
+
+    if (zero_electric_offset != 0)
+    {
+        // abosolute zero offset provided - no need to align
+        zero_electric_angle = zero_electric_offset;
+        // set the sensor direction - default CW
+        sensor_direction = _sensor_direction;
+    }
+    alignSensor(); // 检测零点偏移量和极对数
+
+    // shaft_angle update
+    angle_prev = getAngle(); // getVelocity(),make sure velocity=0 after power on
+    delay(50);
+    shaft_velocity = shaftVelocity(); // 必须调用一次，进入主循环后速度为0
+    delay(5);
+    shaft_angle = shaftAngle(); // shaft angle
+    if (controller == Type_angle)
+        target = shaft_angle; // 角度模式，以当前的角度为目标角度，进入主循环后电机静止
+
+    delay(200);
 }
 /******************************************************************************/
 
@@ -130,21 +149,6 @@ float getVelocity(void)
     velocity_calc_timestamp = now_us;
     return vel;
 }
-/******************************************************************************/
-
-// float as5600GetAngle(void)
-// {
-//     float angle_data = as5600GetRawAngle();
-
-//     float d_angle = angle_data - angle_data_prev;
-//     if (abs(d_angle) > (0.8 * AS5600_RESOLUTION))
-//     {
-//         full_rotation_offset += (d_angle > 0 ? -_2PI : _2PI);
-//     }
-//     angle_data_prev = angle_data;
-
-//     return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
-// }
 
 /******************************************************************************/
 int alignSensor(void)
@@ -216,7 +220,7 @@ int alignSensor(void)
     {
         setPhaseVoltage(voltage_sensor_align, 0, _3PI_2); // 计算零点偏移角度
         delay(700);
-        zero_electric_angle = normalizeAngle(_electricalAngle(sensor_direction * getAngle(), pole_pairs));
+        zero_electric_angle = _normalizeAngle(_electricalAngle(sensor_direction * getAngle(), pole_pairs));
         delay(20);
         printf("MOT: Zero elec. angle:");
         printf("%.4f\r\n", zero_electric_angle);

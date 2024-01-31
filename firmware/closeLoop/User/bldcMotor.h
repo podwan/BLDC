@@ -1,15 +1,17 @@
 #ifndef __BLDC_MOTOR_H
 #define __BLDC_MOTOR_H
 
-#include "common.h"
+#include "userMain.h"
+
 #define M0_Disable HAL_TIM_Base_Stop(&htim1)
 /******************************************************************************/
 
-extern LowPassFilter LPF_velocity;
+
 extern float target;
 extern float voltage_sensor_align;
+extern float voltage_power_supply;
+extern float shaft_velocity;
+
 void motorInit(void);
-void Motor_initFOC(float zero_electric_offset, Direction _sensor_direction);
 void move(float new_target);
-float velocityOpenloop(float target_velocity);
 #endif

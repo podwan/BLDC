@@ -1,7 +1,7 @@
 #ifndef __PID_H
 #define __PID_H
 
-#include "common.h"
+#include "userMain.h"
 
 typedef struct
 {
@@ -10,15 +10,13 @@ typedef struct
     float D;
     float iTerm;
     float outputRamp;
-    float outputLast;
-    float errorLast;
+    float output_prev;
+    float error_prev;
     float outMax;
     float outMin;
-    float dt;
+    float timestamp_prev;
 } PID;
-
-void pidInit(PID *pid, float kp, float ki, float kd, float outputRamp, float outMax, float outMin, float dt);
+extern PID velocityPID, P_angle;
+void pidInit(PID *pid, float kp, float ki, float kd, float outputRamp, float outMax, float outMin);
 float pidCompute(PID *pid, float error);
-// void setTunings(PID *pid, float Kp, float Ki, float Kd);
-extern PID velocityPID;
 #endif

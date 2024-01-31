@@ -1,7 +1,7 @@
 #ifndef __FOC_H
 #define __FOC_H
 
-#include "common.h"
+#include "userMain.h"
 
 #define PWM_GENERATE(p1, p2, p3) \
     {                            \
