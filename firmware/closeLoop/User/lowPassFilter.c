@@ -1,6 +1,8 @@
 
 #include "lowPassFilter.h"
 LowPassFilter LPF_current_q, LPF_current_d, LPF_velocity;
+LowPassFilter lpfAngle;
+
 
 void lowPassFilterInit(LowPassFilter *filter, const float timeConstant)
 {

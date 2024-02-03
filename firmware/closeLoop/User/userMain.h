@@ -1,24 +1,5 @@
 #ifndef __USER_MAIN_H
 #define __USER_MAIN_H
-#include "stm32g4xx_hal.h"
-#include "main.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "FreeRTOS.h"
-#include "task.h"
-#include "main.h"
-#include "cmsis_os.h"
-#include "math_utils.h"
-#include "time_utils.h"
-#include "lowPassFilter.h"
-#include "pid.h"
-#include "sensor.h"
-#include "tim.h"
-#include <math.h>
-#include "foc.h"
-#include "bldcMotor.h"
-#include "comm.h"
 
 #define PWM_PERIOD 8000.0f // PWM period * 2
 #define U_DC 12.0f
@@ -42,8 +23,18 @@ typedef enum
     true
 } bool;
 
+#include "stm32g4xx_hal.h"
+#include "main.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "main.h"
+#include "cmsis_os.h"
+
 
 void userMain(void);
-
+void printLog(void);
 extern osThreadId_t ctrlLoopTaskHandle;
 #endif

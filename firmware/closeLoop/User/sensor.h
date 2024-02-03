@@ -2,7 +2,7 @@
 #define __SENSOR_H
 
 #include "userMain.h"
-#define SENSOR_DIRECTION -1 // 根据硬件方案，角度值随逆时针旋转减小
+
 /******************************************************************************/
 #define AS5600_CPR 4096    // 12bit
 #define AS5047P_CPR 16384  // 14bit
@@ -19,23 +19,34 @@ typedef enum
     UNKNOWN = 0 // not yet known or invalid state
 } Direction;
 
+typedef enum
+{
+    NO_ERROR = 0,
+    FAILED_TO_NOTICE_MOVEMENT,
+    POLE_PAIR_MISMATCH
+} Error_t;
+
 extern long cpr;
 extern float angle_prev;
-extern Direction sensor_direction;
-extern int pole_pairs;
-extern float zero_electric_angle;
+extern Direction countDirection;
+extern int polePairs;
+extern float zeroElectricAngleOffset;
 extern float sensor_offset;
 
 /******************************************************************************/
 float shaftAngle(void);
 float shaftVelocity(void);
 float electricalAngle(void);
+float getEstimateVelocity(void);
 /******************************************************************************/
 
 /******************************************************************************/
 void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction);
 float getAngle(void);
 float getVelocity(void);
-int alignSensor(void);
+// int alignSensor(void);
+float getElectricalAngle();
+bool alignSensor(void);
+float getEstimateAngle();
 /******************************************************************************/
 #endif

@@ -2,10 +2,17 @@
 #include "as5600.h"
 #include "bldcMotor.h"
 
-Direction sensor_direction;
-int pole_pairs;
-float zero_electric_angle;
+Direction countDirection;
+int polePairs;
+float zeroElectricAngleOffset;
 float sensor_offset = 0; // 似乎没用
+Error_t error = NO_ERROR;
+float angleLast = 0;
+uint64_t angleTimestamp = 0;
+float velocityLast = 0;
+uint64_t velocityTimestamp = 0;
+int32_t rotationCount = 0;
+int32_t rotationCountLast = 0;
 /******************************************************************************/
 long cpr;
 long velocity_calc_timestamp; // 速度计时，用于计算速度
@@ -13,7 +20,54 @@ long angle_data_prev;         // 获取角度用
 float angle_prev;             // 获取速度用
 float full_rotation_offset;   // 角度累加
 /******************************************************************************/
-uint16_t getRawCount(void);
+uint16_t getRawCount(void) // 获取编码器的原始值
+{
+    uint16_t val;
+
+#if AS5600
+    val = as5600GetRawAngle() & 0x0FFF;
+#elif AS5047P
+    val = ReadAS5047P() & 0x3FFF;
+#elif TLE5012B
+    val = ReadTLE5012B() & 0x7FFF;
+#elif MA730
+    val = ReadMA730(); // 左对齐，低两位补0
+#elif MT6701
+    val = ReadMT6701(); // 左对齐，低两位补0
+#elif ABZ
+    val = ReadABZ();
+#endif
+
+    return val;
+}
+
+float getLapAngle()
+{
+    return angleLast;
+}
+
+float getFullAngle()
+{
+    return (float)rotationCount * _2PI + angleLast;
+}
+
+void varInit()
+{
+    // Initialize all the internal variables of EncoderBase
+    // to ensure a "smooth" startup (without a 'jump' from zero)
+    getRawCount();
+    delayMicroSeconds(1);
+
+    velocityLast = getRawCount();
+    velocityTimestamp = micros();
+    HAL_Delay(1);
+
+    getRawCount();
+    delayMicroSeconds(1);
+
+    angleLast = getRawCount();
+    angleTimestamp = micros();
+}
 /******************************************************************************/
 // 初始化三种SPI接口的编码器的参数, 初始化I2C接口或者SPI接口
 void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction)
@@ -54,52 +108,33 @@ void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction
     if (zero_electric_offset != 0)
     {
         // abosolute zero offset provided - no need to align
-        zero_electric_angle = zero_electric_offset;
+        zeroElectricAngleOffset = zero_electric_offset;
         // set the sensor direction - default CW
-        sensor_direction = _sensor_direction;
+        countDirection = _sensor_direction;
     }
     alignSensor(); // 检测零点偏移量和极对数
 
-    // shaft_angle update
+    // estimateAngle update
     angle_prev = getAngle(); // getVelocity(),make sure velocity=0 after power on
     delay(50);
-    shaft_velocity = shaftVelocity(); // 必须调用一次，进入主循环后速度为0
+    estimateVelocity = shaftVelocity(); // 必须调用一次，进入主循环后速度为0
     delay(5);
-    shaft_angle = shaftAngle(); // shaft angle
+    estimateAngle = shaftAngle(); // shaft angle
     if (controller == Type_angle)
-        target = shaft_angle; // 角度模式，以当前的角度为目标角度，进入主循环后电机静止
+        target = estimateAngle; // 角度模式，以当前的角度为目标角度，进入主循环后电机静止
 
+    angleLast = getRawCount();
+    angleTimestamp = micros();
     delay(200);
+    varInit();
 }
 /******************************************************************************/
-
-uint16_t getRawCount(void) // 获取编码器的原始值
-{
-    uint16_t val;
-
-#if AS5600
-    val = as5600GetRawAngle() & 0x0FFF;
-#elif AS5047P
-    val = ReadAS5047P() & 0x3FFF;
-#elif TLE5012B
-    val = ReadTLE5012B() & 0x7FFF;
-#elif MA730
-    val = ReadMA730(); // 左对齐，低两位补0
-#elif MT6701
-    val = ReadMT6701(); // 左对齐，低两位补0
-#elif ABZ
-    val = ReadABZ();
-#endif
-
-    return val;
-}
 
 float getAngle(void)
 {
     long angle_data, d_angle;
 
     angle_data = getRawCount();
-
     // tracking the number of rotations
     // in order to expand angle range form [0,2PI] to basically infinity
     d_angle = angle_data - angle_data_prev;
@@ -120,7 +155,6 @@ float getAngle(void)
         full_rotation_offset = 0;
         angle_prev = angle_prev + _2PI * 2000;
     }
-
     // return the full angle
     // (number of full rotations)*2PI + current sensor angle
     return (full_rotation_offset + ((float)angle_data / cpr * _2PI));
@@ -150,7 +184,7 @@ float getVelocity(void)
     velocity_calc_timestamp = now_us;
     return vel;
 }
-
+#if 0
 /******************************************************************************/
 int alignSensor(void)
 {
@@ -161,14 +195,14 @@ int alignSensor(void)
 
     printf("MOT: Align sensor.\r\n");
 
-    if (sensor_direction == UNKNOWN) // 没有设置，需要检测
+    if (countDirection == UNKNOWN) // 没有设置，需要检测
     {
         // find natural direction
         // move one electrical revolution forward
         for (i = 0; i <= 500; i++)
         {
             angle = _3PI_2 + _2PI * i / 500.0f;
-            setPhaseVoltage(voltage_sensor_align, 0, angle);
+            setPhaseVoltage(voltageUsedForSensorAlign, 0, angle);
             delay(2);
         }
         mid_angle = getAngle();
@@ -176,7 +210,7 @@ int alignSensor(void)
         for (i = 500; i >= 0; i--)
         {
             angle = _3PI_2 + _2PI * i / 500.0f;
-            setPhaseVoltage(voltage_sensor_align, 0, angle);
+            setPhaseVoltage(voltageUsedForSensorAlign, 0, angle);
             delay(2);
         }
         end_angle = getAngle();
@@ -195,36 +229,36 @@ int alignSensor(void)
         }
         else if (mid_angle < end_angle)
         {
-            printf("MOT: sensor_direction==CCW\r\n");
-            sensor_direction = CCW;
+            printf("MOT: countDirection==CCW\r\n");
+            countDirection = CCW;
         }
         else
         {
-            printf("MOT: sensor_direction==CW\r\n");
-            sensor_direction = CW;
+            printf("MOT: countDirection==CW\r\n");
+            countDirection = CW;
         }
 
-        printf("MOT: PP check: ");                  // 计算Pole_Pairs
-        if (fabs(moved * pole_pairs - _2PI) > 0.5f) // 0.5 is arbitrary number it can be lower or higher!
+        printf("MOT: PP check: ");                 // 计算Pole_Pairs
+        if (fabs(moved * polePairs - _2PI) > 0.5f) // 0.5 is arbitrary number it can be lower or higher!
         {
-            printf("fail - estimated pp:");
-            pole_pairs = _2PI / moved + 0.5f; // 浮点数转整形，四舍五入
-            printf("%d\r\n", pole_pairs);
+            printf("OK - estimated pp:");
+            polePairs = _2PI / moved + 0.5f; // 浮点数转整形，四舍五入
+            printf("%d\r\n", polePairs);
         }
         else
-            printf("OK!\r\n");
+            printf("fail!\r\n");
     }
     else
         printf("MOT: Skip dir calib.\r\n");
 
-    if (zero_electric_angle == 0) // 没有设置，需要检测
+    if (zeroElectricAngleOffset == 0) // 没有设置，需要检测
     {
-        setPhaseVoltage(voltage_sensor_align, 0, _3PI_2); // 计算零点偏移角度
+        setPhaseVoltage(voltageUsedForSensorAlign, 0, _3PI_2); // 计算零点偏移角度
         delay(700);
-        zero_electric_angle = _normalizeAngle(_electricalAngle(sensor_direction * getAngle(), pole_pairs));
+        zeroElectricAngleOffset = _normalizeAngle(_electricalAngle(countDirection * getAngle(), polePairs));
         delay(20);
         printf("MOT: Zero elec. angle:");
-        printf("%.4f\r\n", zero_electric_angle);
+        printf("%.4f\r\n", zeroElectricAngleOffset);
         setPhaseVoltage(0, 0, 0);
         delay(200);
     }
@@ -233,24 +267,141 @@ int alignSensor(void)
 
     return 1;
 }
+#endif
+void encoderUpdate()
+{
+    float angle = getRawCount();
+    angleTimestamp = micros();
+
+    float deltaAngle = angle - angleLast;
+    // If overflow happened track it as full rotation
+    if (abs(deltaAngle) > (0.8f * _2PI))
+        rotationCount += (deltaAngle > 0) ? -1 : 1;
+
+    angleLast = angle;
+}
+bool alignSensor()
+{
+    if (countDirection == UNKNOWN)
+    {
+
+        HAL_Delay(100);
+
+        // Find natural direction
+        for (int i = 0; i <= 500; i++)
+        {
+            float angle = _3PI_2 + _2PI * (float)i / 500.0f;
+            setPhaseVoltage(voltageUsedForSensorAlign, 0, angle);
+            HAL_Delay(2);
+        }
+
+        encoderUpdate();
+        float midAngle = getFullAngle();
+
+        for (int i = 500; i >= 0; i--)
+        {
+            float angle = _3PI_2 + _2PI * (float)i / 500.0f;
+            setPhaseVoltage(voltageUsedForSensorAlign, 0, angle);
+            HAL_Delay(2);
+        }
+
+        encoderUpdate();
+        float endAngle = getFullAngle();
+
+        setPhaseVoltage(0, 0, 0);
+        // SetPowerMotor(false);
+        HAL_Delay(200);
+
+        // Determine the direction the sensor moved
+        if (midAngle == endAngle)
+        {
+            error = FAILED_TO_NOTICE_MOVEMENT;
+            return false;
+        }
+        else if (midAngle < endAngle)
+        {
+            countDirection = CCW;
+        }
+        else
+        {
+            countDirection = CW;
+        }
+
+        // Check pole pair number
+        float deltaAngle = fabs(midAngle - endAngle);
+        if (fabs(deltaAngle * (float)polePairs - _2PI) > 0.5f)
+        {
+            // 0.5f is arbitrary number, it can be tuned
+            error = POLE_PAIR_MISMATCH;
+            return false;
+        }
+    }
+
+    // Align the electrical phases of the motor and sensor
+    if (!ASSERT(zeroElectricAngleOffset))
+    {
+        // SetPowerMotor(true);
+        // Set angle -90(270 = 3PI/2) degrees
+        setPhaseVoltage(voltageUsedForSensorAlign, 0, _3PI_2);
+
+        HAL_Delay(1000);
+        encoderUpdate();
+        zeroElectricAngleOffset = 0; // Clear offset first
+        zeroElectricAngleOffset = getElectricalAngle();
+
+        setPhaseVoltage(0, 0, 0);
+        // SetPowerMotor(false);
+        HAL_Delay(200);
+    }
+
+    return true;
+}
+
 /******************************************************************************/
 // shaft angle calculation
 float shaftAngle(void)
 {
     // if no sensor linked return previous value ( for open loop )
-    // if(!sensor) return shaft_angle;
-    return SENSOR_DIRECTION * getAngle() - sensor_offset;
+    // if(!sensor) return estimateAngle;
+    return countDirection * getAngle() - sensor_offset;
 }
 // shaft velocity calculation
 float shaftVelocity(void)
 {
     // if no sensor linked return previous value ( for open loop )
-    // if(!sensor) return shaft_velocity;
-    return SENSOR_DIRECTION * lowPassFiltering(&LPF_velocity, getVelocity());
-    // return sensor_direction*getVelocity();
+    // if(!sensor) return estimateVelocity;
+    return countDirection * lowPassFiltering(&LPF_velocity, getVelocity());
+    // return countDirection*getVelocity();
 }
 /******************************************************************************/
 float electricalAngle(void)
 {
-    return _normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
+    return _normalizeAngle((estimateAngle + sensor_offset) * polePairs - zeroElectricAngleOffset);
+}
+
+float getEstimateVelocity()
+{
+    // If no sensor linked return previous value (for open-loop case)
+    float rawVelocity, estVelocity;
+    rawVelocity = (float)countDirection * getVelocity();
+    estVelocity = lowPassFiltering(&LPF_velocity, rawVelocity);
+
+    return estVelocity;
+}
+float getElectricalAngle()
+{
+    // If no sensor linked return previous value (for open-loop case)
+    return _normalizeAngle((float)(countDirection * polePairs) * getLapAngle() - zeroElectricAngleOffset);
+}
+
+float getEstimateAngle()
+{
+    // If no sensor linked return previous value (for open-loop case)
+    // if (!encoder)
+    //     return estimateAngle;
+    float rawAngle, estAngle;
+    rawAngle = (float)(countDirection)*getFullAngle();
+    estAngle = lowPassFiltering(&lpfAngle, rawAngle);
+
+    return estAngle;
 }

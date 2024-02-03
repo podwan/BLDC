@@ -11,11 +11,10 @@
 class Motor
 {
 public:
-    explicit Motor(int _polePairs, float _phaseResistance = NOT_SET) :
-        polePairs(_polePairs), phaseResistance(_phaseResistance)
+    explicit Motor(int _polePairs, float _phaseResistance = NOT_SET) : polePairs(_polePairs), phaseResistance(_phaseResistance)
     {
         config.controlMode = ANGLE;
-        config.voltageUsedForSensorAlign =1.0f;
+        config.voltageUsedForSensorAlign = 1.0f;
         config.voltageLimit = 12.0f;
         config.currentLimit = 0.2f;
         config.velocityLimit = 20.0f;
@@ -29,7 +28,6 @@ public:
         config.pidVelocity = PidController{0.5f, 10.0f, 0.0f, 1000.0f, 12.0f};
         config.pidAngle = PidController{20.0f, 0, 0, 0, 20.0f};
     }
-
 
     enum ControlMode_t
     {
@@ -72,18 +70,16 @@ public:
         float estVelocity{};
     };
 
-
     bool Init(float _zeroElectricOffset = NOT_SET, EncoderBase::Direction _encoderDir = EncoderBase::CW);
-    void AttachDriver(DriverBase* _driver);
-    void AttachEncoder(EncoderBase* _encoder);
-    void AttachCurrentSense(CurrentSenseBase* _currentSense);
+    void AttachDriver(DriverBase *_driver);
+    void AttachEncoder(EncoderBase *_encoder);
+    void AttachCurrentSense(CurrentSenseBase *_currentSense);
     void SetEnable(bool _enable);
     float GetEstimateAngle();
     float GetEstimateVelocity();
     float GetElectricalAngle();
     void Tick();
     void SetTorqueLimit(float _val);
-
 
     float target = 0;
     Error_t error = NO_ERROR;
@@ -92,10 +88,9 @@ public:
     DqVoltage_t voltage{};
     DqCurrent_t current{};
     float zeroElectricAngleOffset = NOT_SET;
-    CurrentSenseBase* currentSense = nullptr;
-    DriverBase* driver = nullptr;
-    EncoderBase* encoder = nullptr;
-
+    CurrentSenseBase *currentSense = nullptr;
+    DriverBase *driver = nullptr;
+    EncoderBase *encoder = nullptr;
 
 private:
     bool InitFOC(float _zeroElectricOffset, EncoderBase::Direction _sensorDirection);
@@ -105,7 +100,6 @@ private:
     float VelocityOpenLoopTick(float _target);
     float AngleOpenLoopTick(float _target);
     void SetPhaseVoltage(float _voltageQ, float _voltageD, float _angleElectrical);
-
 
     bool enabled = false;
     float phaseResistance = NOT_SET;
@@ -119,6 +113,5 @@ private:
     float setPointAngle{};
     uint64_t openLoopTimestamp{};
 };
-
 
 #endif

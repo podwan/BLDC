@@ -3,19 +3,20 @@
 
 float voltage_power_supply;
 float voltage_limit;
-float voltage_sensor_align;
+float voltageUsedForSensorAlign;
 float velocity_limit;
 float current_limit;
-float shaft_velocity;
+float estimateVelocity;
 unsigned long open_loop_timestamp;
 float target;
+float estimateAngle;
 /******************************************************************************/
-float shaft_angle; //!< current motor angle
+float estimateAngle; //!< current motor angle
 float electrical_angle;
 
-float current_sp;
-float shaft_velocity_sp;
-float shaft_angle_sp;
+float setPointCurrent;
+float setPointVelocity;
+float setPointAngle;
 /******************************************************************************/
 static float velocityOpenloop(float target_velocity);
 static float angleOpenloop(float target_angle);
@@ -28,10 +29,12 @@ void motorInit(void)
 {
     lowPassFilterInit(&LPF_velocity, 0.02f);
 
-    voltage_sensor_align = 2; // V 航模电机设置的值小一点比如0.5-1，云台电机设置的大一点比如2-3
+    lowPassFilterInit(&lpfAngle, 0.03f);
+
+    voltageUsedForSensorAlign = 2; // V 航模电机设置的值小一点比如0.5-1，云台电机设置的大一点比如2-3
 
     torque_controller = Type_voltage; // 当前只有电压模式
-    controller = Type_velocity; // Type_angle; //Type_torque; //Type_velocity
+    controller = VELOCITY;            // Type_angle; //Type_torque; //VELOCITY
                                       // 0.2, 速度环PI参数，只用P参数方便快速调试
     voltage_limit = uQ_MAX;           // V，主要为限制电机最大电流，最大值需小于12/1.732=6.9
     pidInit(&velocityPID, 0.1, 1, 0, 100, uQ_MAX, 0);
@@ -49,87 +52,73 @@ void motorInit(void)
     else
         velocityPID.outMax = current_limit;
 
-    if (voltage_sensor_align > voltage_limit)
-        voltage_sensor_align = voltage_limit;
+    if (voltageUsedForSensorAlign > voltage_limit)
+        voltageUsedForSensorAlign = voltage_limit;
 
     MagneticSensor_Init(0, UNKNOWN);
+
+    encoderUpdate();
+    estimateAngle = getEstimateAngle();
 }
 
-void move(float new_target)
+void move()
 {
-    shaft_velocity = shaftVelocity();
-    
+    if (controller != ANGLE_OPEN_LOOP &&
+        controller != VELOCITY_OPEN_LOOP)
+    {
+        estimateAngle = getEstimateAngle();
+    }
+    estimateVelocity = getEstimateVelocity();
+    //  estimateVelocity = shaftVelocity();
+#if 1
     switch (controller)
     {
     // case Type_torque:
     //     if (torque_controller == Type_voltage)
     //         voltage.q = new_target; // if voltage torque control
     //     else
-    //         current_sp = new_target; // if current/foc_current torque control
+    //         setPointCurrent = new_target; // if current/foc_current torque control
     //     break;
     case Type_angle:
         // angle set point
-        shaft_angle_sp = new_target;
+        setPointAngle = target;
         // calculate velocity set point
-        shaft_velocity_sp = pidCompute(&P_angle, (shaft_angle_sp - shaft_angle));
+        setPointVelocity = pidCompute(&P_angle, (setPointAngle - estimateAngle));
         // calculate the torque command
-        current_sp = pidCompute(&velocityPID, (shaft_velocity_sp - shaft_velocity)); // if voltage torque control
+        setPointCurrent = pidCompute(&velocityPID, (setPointVelocity - estimateVelocity)); // if voltage torque control
         // if torque controlled through voltage
-        if (torque_controller == Type_voltage)
-        {
-            voltage.q = current_sp;
-            voltage.d = 0;
-        }
         break;
-    case Type_velocity:
-        // velocity set point
-        shaft_velocity_sp = new_target;
+    case VELOCITY:
+        setPointVelocity = target;
         // calculate the torque command
-        current_sp = pidCompute(&velocityPID, (shaft_velocity_sp - shaft_velocity)); // if current/foc_current torque control
-        // if torque controlled through voltage control
-        if (torque_controller == Type_voltage)
-        {
-            voltage.q = current_sp; // use voltage if phase-resistance not provided
-            voltage.d = 0;
-        }
+        setPointCurrent = pidCompute(&velocityPID, (setPointVelocity - estimateVelocity));
         break;
-    case Type_velocity_openloop:
-        // velocity control in open loop
-        shaft_velocity_sp = new_target;
-        // shaft_velocity_sp = 1;
-        voltage.q = velocityOpenloop(shaft_velocity_sp); // returns the voltage that is set to the motor
+    case VELOCITY_OPEN_LOOP:
+        setPointVelocity = target;
+        voltage.q = velocityOpenloop(setPointVelocity);
         voltage.d = 0;
         break;
-    case Type_angle_openloop:
-        // angle control in open loop
-        shaft_angle_sp = new_target;
-        voltage.q = angleOpenloop(shaft_angle_sp); // returns the voltage that is set to the motor
+    case ANGLE_OPEN_LOOP:
+        setPointAngle = target;
+        voltage.q = angleOpenloop(setPointAngle);
         voltage.d = 0;
         break;
     }
+#endif
 }
 
 /******************************************************************************/
 void loopFOC(void)
 {
-    if (controller == Type_angle_openloop || controller == Type_velocity_openloop)
+    // encoderUpdate();
+    if (controller == ANGLE_OPEN_LOOP || controller == VELOCITY_OPEN_LOOP)
         return;
 
-    shaft_angle = shaftAngle();           // shaft angle
+    // estimateAngle = shaftAngle();           // shaft angle
     electrical_angle = electricalAngle(); // electrical angle - need shaftAngle to be called first
 
-    switch (torque_controller)
-    {
-    case Type_voltage: // no need to do anything really
-        break;
-    case Type_dc_current:
-        break;
-    case Type_foc_current:
-        break;
-    default:
-        printf("MOT: no torque control selected!\r\n");
-        break;
-    }
+    voltage.q = setPointCurrent; // use voltage if phase-resistance not provided
+    voltage.d = 0;
     // set the phase voltage - FOC heart function :)
     setPhaseVoltage(voltage.q, voltage.d, electrical_angle);
 }
@@ -147,13 +136,13 @@ static float velocityOpenloop(float target_velocity)
     open_loop_timestamp = now_us; // save timestamp for next call
 
     // calculate the necessary angle to achieve target velocity
-    shaft_angle = _normalizeAngle(shaft_angle + target_velocity * Ts);
+    estimateAngle = _normalizeAngle(estimateAngle + target_velocity * Ts);
     // for display purposes
-    shaft_velocity = target_velocity;
+    // estimateVelocity = target_velocity;
 
-    Uq = voltage_sensor_align;
+    Uq = voltageUsedForSensorAlign;
     // set the maximal allowed voltage (voltage_limit) with the necessary angle
-    setPhaseVoltage(Uq, 0, _electricalAngle(shaft_angle, pole_pairs));
+    setPhaseVoltage(Uq, 0, _electricalAngle(estimateAngle, polePairs));
 
     return Uq;
 }
@@ -172,20 +161,20 @@ static float angleOpenloop(float target_angle)
 
     // calculate the necessary angle to move from current position towards target angle
     // with maximal velocity (velocity_limit)
-    if (fabs(target_angle - shaft_angle) > velocity_limit * Ts)
+    if (fabs(target_angle - estimateAngle) > velocity_limit * Ts)
     {
-        shaft_angle += SIGN(target_angle - shaft_angle) * velocity_limit * Ts;
-        shaft_velocity = velocity_limit;
+        estimateAngle += SIGN(target_angle - estimateAngle) * velocity_limit * Ts;
+        estimateVelocity = velocity_limit;
     }
     else
     {
-        shaft_angle = target_angle;
-        shaft_velocity = 0;
+        estimateAngle = target_angle;
+        estimateVelocity = 0;
     }
 
-    Uq = voltage_sensor_align;
+    Uq = voltageUsedForSensorAlign;
     // set the maximal allowed voltage (voltage_limit) with the necessary angle
-    setPhaseVoltage(Uq, 0, _electricalAngle(shaft_angle, pole_pairs));
+    setPhaseVoltage(Uq, 0, _electricalAngle(estimateAngle, polePairs));
 
     return Uq;
 }

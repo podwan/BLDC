@@ -13,10 +13,10 @@
 typedef enum
 {
     Type_torque,   //!< Torque control
-    Type_velocity, //!< Velocity motion control
+    VELOCITY, //!< Velocity motion control
     Type_angle,    //!< Position/angle motion control
-    Type_velocity_openloop,
-    Type_angle_openloop,
+    VELOCITY_OPEN_LOOP,
+    ANGLE_OPEN_LOOP,
 } MotionControlType;
 
 /**
@@ -32,17 +32,17 @@ typedef enum
 extern TorqueControlType torque_controller;
 extern MotionControlType controller;
 extern float target;
-extern float voltage_sensor_align;
+extern float voltageUsedForSensorAlign;
 extern float voltage_power_supply;
-extern float shaft_velocity;
+extern float estimateVelocity;
 /******************************************************************************/
-extern float shaft_angle; //!< current motor angle
+extern float estimateAngle; //!< current motor angle
 extern float electrical_angle;
-// extern float shaft_velocity;
-extern float current_sp;
-extern float shaft_velocity_sp;
-extern float shaft_angle_sp;
+// extern float estimateVelocity;
+extern float setPointCurrent;
+extern float setPointVelocity;
+extern float setPointAngle;
 
 void motorInit(void);
-void move(float new_target);
+void move(void);
 #endif

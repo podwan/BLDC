@@ -18,8 +18,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void printLog()
 {
-  printf("%s", sendStuff);
-  memset(sendStuff, '\0', sizeof sendStuff);
+  printf("velocity: %.2f, angle: %.2f\n", estimateVelocity, shaftAngle());
 }
 
 // 若使用C库printf需要实现
@@ -78,22 +77,22 @@ void commander_run(void)
       printf("%s", sndBuff);
       // HAL_UART_Transmit_DMA(&huart3, (uint8_t *)sndBuff, sizeof(sndBuff));
       break;
-    case 'P': // P0.5  čŽžç˝ŽéĺşŚçŻçPĺć°
+    case 'P': // P0.5
       velocityPID.P = atof((const char *)(rxUart.buf + 1));
       sprintf(sndBuff, "P=%.2f\r\n", velocityPID.P);
       printf("%s", sndBuff);
       break;
-    case 'I': // I0.2  čŽžç˝ŽéĺşŚçŻçIĺć°
+    case 'I': // I0.2
       velocityPID.I = atof((const char *)(rxUart.buf + 1));
       sprintf(sndBuff, "I=%.2f\r\n", velocityPID.I);
       printf("%s", sndBuff);
       break;
-    case 'V': // V  čŻťĺŽćśé?ĺşŚ
-      sprintf(sndBuff, "Vel=%.2f\r\n", shaft_velocity);
+    case 'V': // V
+      sprintf(sndBuff, "Vel=%.2f\r\n", estimateVelocity);
       printf("%s", sndBuff);
       break;
-    case 'A': // A  čŻťçťĺŻšč§ĺş?
-      sprintf(sndBuff, "Ang=%.2f\r\n", shaft_angle);
+    case 'A': // A
+      sprintf(sndBuff, "Ang=%.2f\r\n", estimateAngle);
       printf("%s", sndBuff);
       break;
     }

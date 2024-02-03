@@ -11,9 +11,8 @@ void ThreadCtrlLoop(void *argument)
     {
         // Suspended here until got Notification.
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        move(target);
+        move();
         loopFOC();
-        // commander_run();
     }
 }
 
@@ -22,8 +21,9 @@ void communicationLoop(void *argument)
     for (;;)
     {
 
-        printf("hello\n");
-        osDelay(1000);
+        commander_run();
+        printLog();
+        osDelay(500);
     }
 }
 osThreadId_t ctrlLoopTaskHandle;
@@ -47,14 +47,14 @@ void userMain()
     HAL_TIM_Base_Start_IT(&htim6);
 }
 
-// void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-// {
-//     if (htim->Instance == TIM6)
-//     {
-//         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM6)
+    {
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-//         // Wake & invoke thread IMMEDIATELY.
-//         vTaskNotifyGiveFromISR(ctrlLoopTaskHandle, &xHigherPriorityTaskWoken);
-//         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-//     }
-// }
+        // Wake & invoke thread IMMEDIATELY.
+        vTaskNotifyGiveFromISR(ctrlLoopTaskHandle, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+}

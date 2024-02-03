@@ -129,7 +129,6 @@ int main(void)
   __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_JEOC);
   // HAL_ADCEx_InjectedStart_IT(&hadc1);
   // HAL_ADCEx_InjectedStart(&hadc2);
-
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);

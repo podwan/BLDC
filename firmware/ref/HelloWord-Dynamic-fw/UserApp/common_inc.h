@@ -18,7 +18,7 @@ extern "C" {
 #include "tim.h"
 #include "i2c.h"
 #include "spi.h"
-
+#include "comm.h"
 
 void Main(void);
 

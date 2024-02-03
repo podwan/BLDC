@@ -54,9 +54,9 @@ float _normalizeAngle(float angle)
 
 /***************************************************************************/
 // Electrical angle calculation
-float _electricalAngle(float shaft_angle, int pole_pairs)
+float _electricalAngle(float estimateAngle, int polePairs)
 {
-    return (shaft_angle * pole_pairs);
+    return (estimateAngle * polePairs);
 }
 // Square root approximation function using
 // https://reprap.org/forum/read.php?147,219210
