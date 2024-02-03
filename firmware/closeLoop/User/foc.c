@@ -1,42 +1,9 @@
 #include "foc.h"
 #include "bldcMotor.h"
 
-/******************************************************************************/
-float shaft_angle; //!< current motor angle
-float electrical_angle;
-
-float current_sp;
-float shaft_velocity_sp;
-float shaft_angle_sp;
 DQVoltage_s voltage;
 DQCurrent_s current;
 
-TorqueControlType torque_controller;
-MotionControlType controller;
-
-float sensor_offset = 0; // 似乎没用
-
-/******************************************************************************/
-// shaft angle calculation
-float shaftAngle(void)
-{
-    // if no sensor linked return previous value ( for open loop )
-    // if(!sensor) return shaft_angle;
-    return SENSOR_DIRECTION * getAngle() - sensor_offset;
-}
-// shaft velocity calculation
-float shaftVelocity(void)
-{
-    // if no sensor linked return previous value ( for open loop )
-    // if(!sensor) return shaft_velocity;
-    return SENSOR_DIRECTION * lowPassFiltering(&LPF_velocity, getVelocity());
-    // return sensor_direction*getVelocity();
-}
-/******************************************************************************/
-float electricalAngle(void)
-{
-    return _normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
-}
 /******************************************************************************/
 
 void clarke(float iA, float iB, float iC, float *iAlpha, float *iBeta)
@@ -166,13 +133,13 @@ void SVPWM(float uAlpha, float uBeta)
         pwm3Duty = v2;
         break;
     }
-    temp[2] = pwm1Duty;
-    temp[3] = pwm2Duty;
-    temp[4] = pwm3Duty;
+    //    temp[2] = pwm1Duty;
+    //    temp[3] = pwm2Duty;
+    //    temp[4] = pwm3Duty;
 
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
-
+#if 1
 void setPhaseVoltage(float Uq, float Ud, float angle_el)
 {
     Uq = CONSTRAINT(Uq, 0, uQ_MAX);
@@ -183,4 +150,77 @@ void setPhaseVoltage(float Uq, float Ud, float angle_el)
     revParkOperate(Ud, Uq, angle_el, &uAlpha, &uBeta);
     SVPWM(uAlpha, uBeta);
 }
+#else
+void setPhaseVoltage(float Uq, float Ud, float angle_el)
+{
+    float Uout;
+    uint32_t sector;
+    float T0, T1, T2;
+    float Ta, Tb, Tc;
 
+    if (Ud) // only if Ud and Uq set
+    {       // SQRT is an approx of sqrt (3-4% error)
+        Uout = SQRT(Ud * Ud + Uq * Uq) / voltage_power_supply;
+        // angle normalisation in between 0 and 2pi
+        // only necessary if using SinApprox and _cos - approximation functions
+        angle_el = _normalizeAngle(angle_el + atan2(Uq, Ud));
+    }
+    else
+    { // only Uq available - no need for atan2 and sqrt
+        Uout = Uq / voltage_power_supply;
+        // angle normalisation in between 0 and 2pi
+        // only necessary if using SinApprox and _cos - approximation functions
+        angle_el = _normalizeAngle(angle_el + _PI_2);
+    }
+
+    sector = (angle_el / _PI_3) + 1;
+    T1 = _SQRT3 * SinApprox(sector * _PI_3 - angle_el) * Uout;
+    T2 = _SQRT3 * SinApprox(angle_el - (sector - 1.0f) * _PI_3) * Uout;
+    T0 = 1 - T1 - T2;
+
+    // calculate the duty cycles(times)
+    switch (sector)
+    {
+    case 1:
+        Ta = T1 + T2 + T0 / 2;
+        Tb = T2 + T0 / 2;
+        Tc = T0 / 2;
+        break;
+    case 2:
+        Ta = T1 + T0 / 2;
+        Tb = T1 + T2 + T0 / 2;
+        Tc = T0 / 2;
+        break;
+    case 3:
+        Ta = T0 / 2;
+        Tb = T1 + T2 + T0 / 2;
+        Tc = T2 + T0 / 2;
+        break;
+    case 4:
+        Ta = T0 / 2;
+        Tb = T1 + T0 / 2;
+        Tc = T1 + T2 + T0 / 2;
+        break;
+    case 5:
+        Ta = T2 + T0 / 2;
+        Tb = T0 / 2;
+        Tc = T1 + T2 + T0 / 2;
+        break;
+    case 6:
+        Ta = T1 + T2 + T0 / 2;
+        Tb = T0 / 2;
+        Tc = T1 + T0 / 2;
+        break;
+    default: // possible error state
+        Ta = 0;
+        Tb = 0;
+        Tc = 0;
+    }
+
+    // TIM_SetCompare1(TIM1, Ta * PWM_Period);
+    // TIM_SetCompare2(TIM1, Tb * PWM_Period);
+    // TIM_SetCompare3(TIM1, Tc * PWM_Period);
+
+    PWM_GENERATE(Ta * PWM_PERIOD, Tb * PWM_PERIOD, Tc * PWM_PERIOD);
+}
+#endif

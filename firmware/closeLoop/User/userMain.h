@@ -42,5 +42,8 @@ typedef enum
     true
 } bool;
 
+
 void userMain(void);
+
+extern osThreadId_t ctrlLoopTaskHandle;
 #endif

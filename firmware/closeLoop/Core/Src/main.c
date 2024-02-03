@@ -33,6 +33,7 @@
 #include <string.h>
 #include "foc.h"
 #include "bldcMotor.h"
+#include "userMain.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +46,6 @@
 /* USER CODE BEGIN PD */
 extern DMA_HandleTypeDef hdma_usart3_tx;
 
-uint8_t aRxBuffer;
 uint8_t Uart1_Rx_Cnt = 0;
 float Vbus, Ia, Ib, Ic;
 uint16_t IA_Offset, IB_Offset, IC_Offset;
@@ -120,6 +120,7 @@ int main(void)
   HAL_OPAMP_Start(&hopamp1);
   HAL_OPAMP_Start(&hopamp2);
   HAL_OPAMP_Start(&hopamp3);
+  // HAL_UART_Receive_IT(&huart3, rxBuffer, RX_CMD_LEN);
   HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
   HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
@@ -128,8 +129,6 @@ int main(void)
   __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_JEOC);
   // HAL_ADCEx_InjectedStart_IT(&hadc1);
   // HAL_ADCEx_InjectedStart(&hadc2);
-  TIM1->ARR = 8000 - 1;
-  TIM1->CCR4 = 8000 - 2;
 
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
@@ -139,7 +138,6 @@ int main(void)
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-
 
   /* USER CODE END 2 */
 
@@ -288,32 +286,32 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) // 10kHz ADC
     }
   }
 }
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(huart);
-  if (Uart1_Rx_Cnt >= USART_BUFFER_SIZE - 1)
-  {
-    Uart1_Rx_Cnt = 0;
-    memset(rxBuffer, 0x00, sizeof(rxBuffer));
-    HAL_UART_Transmit(&huart3, (uint8_t *)"too long\n", 10, 0xFFFF);
-  }
-  else
-  {
-    rxBuffer[Uart1_Rx_Cnt++] = aRxBuffer;
-    if (aRxBuffer == '\n')
-    {
-      Uart1_Rx_Cnt = 0;
-      setUartRecvDone();
-    }
-    //		Uart1_Rx_Cnt = 0;
-    //		memset(rxBuffer,0x00,sizeof(rxBuffer));
-  }
-  HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
-  /* NOTE: This function should not be modified, when the callback is needed,
-           the HAL_UART_TxHalfCpltCallback can be implemented in the user file.
-   */
-}
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// {
+//   /* Prevent unused argument(s) compilation warning */
+//   UNUSED(huart);
+//   if (Uart1_Rx_Cnt >= USART_BUFFER_SIZE - 1)
+//   {
+//     Uart1_Rx_Cnt = 0;
+//     memset(rxBuffer, 0x00, sizeof(rxBuffer));
+//     HAL_UART_Transmit(&huart3, (uint8_t *)"too long\n", 10, 0xFFFF);
+//   }
+//   else
+//   {
+//     rxBuffer[Uart1_Rx_Cnt++] = aRxBuffer;
+//     if (aRxBuffer == '\n')
+//     {
+//       Uart1_Rx_Cnt = 0;
+//       setUartRecvDone();
+//     }
+//     //		Uart1_Rx_Cnt = 0;
+//     //		memset(rxBuffer,0x00,sizeof(rxBuffer));
+//   }
+//   HAL_UART_Receive_IT(&huart3, (uint8_t *)&aRxBuffer, 1);
+//   /* NOTE: This function should not be modified, when the callback is needed,
+//            the HAL_UART_TxHalfCpltCallback can be implemented in the user file.
+//    */
+// }
 
 int fputc(int ch, FILE *f)
 {
@@ -322,8 +320,7 @@ int fputc(int ch, FILE *f)
   USART3->TDR = (uint8_t)ch;
   return ch;
 }
-
-
+float t;
 /* USER CODE END 4 */
 
 /**

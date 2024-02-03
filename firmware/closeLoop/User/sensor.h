@@ -24,6 +24,14 @@ extern float angle_prev;
 extern Direction sensor_direction;
 extern int pole_pairs;
 extern float zero_electric_angle;
+extern float sensor_offset;
+
+/******************************************************************************/
+float shaftAngle(void);
+float shaftVelocity(void);
+float electricalAngle(void);
+/******************************************************************************/
+
 /******************************************************************************/
 void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction);
 float getAngle(void);

@@ -50,25 +50,11 @@
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
-    .name = "defaultTask",
-    .priority = (osPriority_t)osPriorityNormal,
-    .stack_size = 128 * 4};
+  .name = "defaultTask",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 128 * 4
+};
 
-// void ThreadCtrlLoop(void *argument)
-// {
-//   motorInit();
-
-//   printf("Motor ready.\r\n");
-
-//   for (;;)
-//   {
-//     // Suspended here until got Notification.
-//     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-//     move(target);
-//     loopFOC();
-//     commander_run();
-//   }
-// }
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
@@ -79,12 +65,11 @@ void StartDefaultTask(void *argument);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /**
- * @brief  FreeRTOS initialization
- * @param  None
- * @retval None
- */
-void MX_FREERTOS_Init(void)
-{
+  * @brief  FreeRTOS initialization
+  * @param  None
+  * @retval None
+  */
+void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -110,18 +95,13 @@ void MX_FREERTOS_Init(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  // const osThreadAttr_t controlLoopTask_attributes = {
-  //     .name = "ControlLoopTask",
-  //     .priority = (osPriority_t)osPriorityNormal,
-  //     .stack_size = 128 * 4};
-
-  // ctrlLoopTaskHandle = osThreadNew(ThreadCtrlLoop, NULL, &controlLoopTask_attributes);
-  // HAL_TIM_Base_Start_IT(&htim6);
+ 
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
+
 }
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -143,3 +123,4 @@ void StartDefaultTask(void *argument)
 /* USER CODE BEGIN Application */
 
 /* USER CODE END Application */
+

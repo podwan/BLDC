@@ -5,6 +5,7 @@
 Direction sensor_direction;
 int pole_pairs;
 float zero_electric_angle;
+float sensor_offset = 0; // 似乎没用
 /******************************************************************************/
 long cpr;
 long velocity_calc_timestamp; // 速度计时，用于计算速度
@@ -231,4 +232,25 @@ int alignSensor(void)
         printf("MOT: Skip offset calib.\r\n");
 
     return 1;
+}
+/******************************************************************************/
+// shaft angle calculation
+float shaftAngle(void)
+{
+    // if no sensor linked return previous value ( for open loop )
+    // if(!sensor) return shaft_angle;
+    return SENSOR_DIRECTION * getAngle() - sensor_offset;
+}
+// shaft velocity calculation
+float shaftVelocity(void)
+{
+    // if no sensor linked return previous value ( for open loop )
+    // if(!sensor) return shaft_velocity;
+    return SENSOR_DIRECTION * lowPassFiltering(&LPF_velocity, getVelocity());
+    // return sensor_direction*getVelocity();
+}
+/******************************************************************************/
+float electricalAngle(void)
+{
+    return _normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
 }

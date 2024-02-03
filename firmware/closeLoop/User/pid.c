@@ -23,7 +23,7 @@ float pidCompute(PID *pid, float error)
    pid->timestamp_prev = timestamp_now;
    if (Ts <= 0 || Ts > 0.5f)
       Ts = 1e-3f;
-
+   t = Ts;
    /*Compute all the working error variables*/
    float output;
 

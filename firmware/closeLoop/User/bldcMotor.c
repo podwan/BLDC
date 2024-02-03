@@ -10,9 +10,19 @@ float shaft_velocity;
 unsigned long open_loop_timestamp;
 float target;
 /******************************************************************************/
+float shaft_angle; //!< current motor angle
+float electrical_angle;
+
+float current_sp;
+float shaft_velocity_sp;
+float shaft_angle_sp;
+/******************************************************************************/
 static float velocityOpenloop(float target_velocity);
 static float angleOpenloop(float target_angle);
 /******************************************************************************/
+
+TorqueControlType torque_controller;
+MotionControlType controller;
 
 void motorInit(void)
 {
@@ -21,7 +31,7 @@ void motorInit(void)
     voltage_sensor_align = 2; // V 航模电机设置的值小一点比如0.5-1，云台电机设置的大一点比如2-3
 
     torque_controller = Type_voltage; // 当前只有电压模式
-    controller = Type_angle_openloop; // Type_angle; //Type_torque; //Type_velocity
+    controller = Type_velocity; // Type_angle; //Type_torque; //Type_velocity
                                       // 0.2, 速度环PI参数，只用P参数方便快速调试
     voltage_limit = uQ_MAX;           // V，主要为限制电机最大电流，最大值需小于12/1.732=6.9
     pidInit(&velocityPID, 0.1, 1, 0, 100, uQ_MAX, 0);
@@ -48,7 +58,7 @@ void motorInit(void)
 void move(float new_target)
 {
     shaft_velocity = shaftVelocity();
-
+    
     switch (controller)
     {
     // case Type_torque:
