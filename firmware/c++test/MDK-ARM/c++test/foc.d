@@ -1,6 +1,6 @@
-c++test\foc.o: ..\User\foc.cpp
-c++test\foc.o: ..\User\foc.h
-c++test\foc.o: ..\User\userMain.h
+c++test\foc.o: ..\User\Motor\foc.cpp
+c++test\foc.o: ..\User\Motor\foc.h
+c++test\foc.o: ../User/userMain.h
 c++test\foc.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 c++test\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 c++test\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -49,4 +49,4 @@ c++test\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 c++test\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 c++test\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 c++test\foc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-c++test\foc.o: ..\User\math_utils.h
+c++test\foc.o: ..\User\Motor\math_utils.h

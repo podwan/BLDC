@@ -1,6 +1,6 @@
-c++test\time_utils.o: ..\User\time_utils.cpp
-c++test\time_utils.o: ..\User\time_utils.h
-c++test\time_utils.o: ..\User\userMain.h
+c++test\time_utils.o: ..\User\Motor\time_utils.cpp
+c++test\time_utils.o: ..\User\Motor\time_utils.h
+c++test\time_utils.o: ../User/userMain.h
 c++test\time_utils.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 c++test\time_utils.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 c++test\time_utils.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h

@@ -1,5 +1,9 @@
 #include "userMain.h"
 #include "comm.h"
+// #include "User/Platform/encoder.h"
+// #include "User/Platform/driver.h"
+// #include "User/Motor/motor.h"
+// #include "User/Motor/knob.h"
 
 void communicationLoop(void *argument)
 {
@@ -12,21 +16,23 @@ void communicationLoop(void *argument)
     }
 }
 osThreadId_t commTaskHandle;
-//   const char                   *name;   ///< name of the thread
-//   uint32_t                 attr_bits;   ///< attribute bits
-//   void                      *cb_mem;    ///< memory for control block
-//   uint32_t                   cb_size;   ///< size of provided memory for control block
-//   void                   *stack_mem;    ///< memory for stack
-//   uint32_t                stack_size;   ///< size of stack
-//   osPriority_t              priority;   ///< initial thread priority (default: osPriorityNormal)
-//   TZ_ModuleId_t            tz_module;   ///< TrustZone module identifier
-//   uint32_t                  reserved;   ///< reserved (must be 0)
+// osThreadId_t UserLoopTaskHandle;
+// void ThreadUserLoop(void* argument)
+// {
+//     motor.AttachDriver(&driver);
+//     motor.AttachEncoder(&encoder);
+//     knob.Init(&motor);
+//     knob.SetEnable(true);
+//     knob.SetMode(KnobSimulator::MODE_DAMPED);
 
-//.name = "ControlLoopTask",
-//    .stack_size = 4096,
-//    .priority = (osPriority_t)osPriorityRealtime, // robot control thread is critical, should be the highest
-//}
-;
+//     for (;;)
+//     {
+//         // Suspended here until got Notification.
+//         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+//         knob.Tick();
+//     }
+// }
 void userMain()
 {
     const osThreadAttr_t commTask_attributes = {

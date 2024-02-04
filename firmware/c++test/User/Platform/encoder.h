@@ -1,14 +1,9 @@
 #ifndef CTRL_STEP_FW_AS5047_M0_STM32_H
 #define CTRL_STEP_FW_AS5047_M0_STM32_H
 
-#define AS5600_I2C_HANDLE hi2c1
+#include "../Sensor/Encoder/Instances/as5600.h"
 
-// #define I2C_TIME_OUT_BASE 10
-// #define I2C_TIME_OUT_BYTE 1
-
-#include "userMain.h"
-
-class Encoder::EncoderAS5600Base
+class Encoder //: public EncoderAS5600Base
 {
 public:
     Encoder(I2C_HandleTypeDef *_iic)

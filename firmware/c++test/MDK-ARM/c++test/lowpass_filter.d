@@ -1,6 +1,6 @@
-c++test\lowpass_filter.o: ..\User\lowpass_filter.cpp
-c++test\lowpass_filter.o: ..\User\lowpass_filter.h
-c++test\lowpass_filter.o: ..\User\userMain.h
+c++test\lowpass_filter.o: ..\User\Motor\lowpass_filter.cpp
+c++test\lowpass_filter.o: ..\User\Motor\lowpass_filter.h
+c++test\lowpass_filter.o: ../User/userMain.h
 c++test\lowpass_filter.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 c++test\lowpass_filter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 c++test\lowpass_filter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -49,4 +49,4 @@ c++test\lowpass_filter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 c++test\lowpass_filter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 c++test\lowpass_filter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 c++test\lowpass_filter.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-c++test\lowpass_filter.o: ..\User\time_utils.h
+c++test\lowpass_filter.o: ..\User\Motor\time_utils.h

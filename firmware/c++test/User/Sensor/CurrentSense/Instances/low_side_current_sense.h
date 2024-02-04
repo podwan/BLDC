@@ -2,8 +2,8 @@
 #define CTRL_FOC_LITE_FW_LOW_SIDE_CURRENT_SENSE_H
 
 #include "stm32f4xx_hal.h"
-#include "Ctrl/Sensor/CurrentSense/current_sense_base.h"
-#include "Ctrl/Motor/math_utils.h"
+#include "User/Sensor/CurrentSense/current_sense_base.h"
+#include "User/Motor/math_utils.h"
 
 
 class LowSideCurrentSenseBase : public CurrentSenseBase

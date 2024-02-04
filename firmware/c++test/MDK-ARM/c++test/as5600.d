@@ -1,5 +1,6 @@
-c++test\as5600.o: ..\User\Sensor\Encoder\as5600.cpp
-c++test\as5600.o: ..\User\Sensor\Encoder\as5600.h
+c++test\as5600.o: ..\User\Sensor\Encoder\Instances\as5600.cpp
+c++test\as5600.o: ..\User\Sensor\Encoder\Instances\as5600.h
+c++test\as5600.o: ..\User\Sensor\Encoder\encoder_base.h
 c++test\as5600.o: ../User/userMain.h
 c++test\as5600.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 c++test\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
@@ -49,5 +50,4 @@ c++test\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 c++test\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 c++test\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 c++test\as5600.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-c++test\as5600.o: ../User/math_utils.h
 c++test\as5600.o: ../Core/Inc/i2c.h

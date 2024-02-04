@@ -49,5 +49,5 @@ c++test\encoder_base.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 c++test\encoder_base.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 c++test\encoder_base.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
 c++test\encoder_base.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-c++test\encoder_base.o: ../User/math_utils.h
-c++test\encoder_base.o: ../User/time_utils.h
+c++test\encoder_base.o: ..\User\Motor\math_utils.h
+c++test\encoder_base.o: ..\User\Motor\time_utils.h

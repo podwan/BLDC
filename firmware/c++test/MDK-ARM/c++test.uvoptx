@@ -739,8 +739,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\math_utils.cpp</PathWithFileName>
-      <FilenameWithoutPath>math_utils.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\User\Sensor\Encoder\encoder_base.cpp</PathWithFileName>
+      <FilenameWithoutPath>encoder_base.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -751,8 +751,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\foc.cpp</PathWithFileName>
-      <FilenameWithoutPath>foc.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\User\Sensor\Encoder\Instances\as5600.cpp</PathWithFileName>
+      <FilenameWithoutPath>as5600.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -763,8 +763,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\lowpass_filter.cpp</PathWithFileName>
-      <FilenameWithoutPath>lowpass_filter.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\User\Motor\foc.cpp</PathWithFileName>
+      <FilenameWithoutPath>foc.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -775,8 +775,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\time_utils.cpp</PathWithFileName>
-      <FilenameWithoutPath>time_utils.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\User\Motor\lowpass_filter.cpp</PathWithFileName>
+      <FilenameWithoutPath>lowpass_filter.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -787,8 +787,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\Sensor\Encoder\encoder_base.cpp</PathWithFileName>
-      <FilenameWithoutPath>encoder_base.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\User\Motor\math_utils.cpp</PathWithFileName>
+      <FilenameWithoutPath>math_utils.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -799,8 +799,44 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\Sensor\Encoder\as5600.cpp</PathWithFileName>
-      <FilenameWithoutPath>as5600.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\User\Motor\pid.cpp</PathWithFileName>
+      <FilenameWithoutPath>pid.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>47</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\Motor\time_utils.cpp</PathWithFileName>
+      <FilenameWithoutPath>time_utils.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>48</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\Motor\motor.cpp</PathWithFileName>
+      <FilenameWithoutPath>motor.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>49</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\Driver\Instances\driver_fd6288q.cpp</PathWithFileName>
+      <FilenameWithoutPath>driver_fd6288q.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

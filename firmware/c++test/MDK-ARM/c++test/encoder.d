@@ -1,5 +1,7 @@
-c++test\encoder.o: ..\User\Sensor\Encoder\encoder.cpp
-c++test\encoder.o: ..\User\Sensor\Encoder\encoder.h
+c++test\encoder.o: ..\User\Platform\encoder.cpp
+c++test\encoder.o: ..\User\Platform\encoder.h
+c++test\encoder.o: ..\User\Platform\../Sensor/Encoder/Instances/as5600.h
+c++test\encoder.o: ..\User\Sensor\Encoder\encoder_base.h
 c++test\encoder.o: ../User/userMain.h
 c++test\encoder.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 c++test\encoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h

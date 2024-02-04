@@ -1,6 +1,12 @@
 #include "as5600.h"
 #include "i2c.h"
 
+// void EncoderAS5600Base::Init()
+// {
+//   i2cInit();
+//   // VarInit();
+// }
+
 float EncoderAS5600Base::GetRawAngle(void)
 {
   uint16_t raw_angle;
