@@ -5,14 +5,17 @@
 extern "C"
 {
 #endif
-
-#include "stm32g4xx_hal.h"
+// below are common headers which are not created by the user
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
 #include "cmsis_os2.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <cmath>
 
-    void userMain();
+    void userMain(void);
 #ifdef __cplusplus
 }
 #endif

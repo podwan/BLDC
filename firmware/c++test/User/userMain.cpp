@@ -6,7 +6,7 @@ void communicationLoop(void *argument)
     for (;;)
     {
 
-        // commander_run();
+        commander_run();
         printLog();
         osDelay(500);
     }
@@ -42,3 +42,5 @@ void userMain()
     };
     commTaskHandle = osThreadNew(communicationLoop, NULL, &commTask_attributes);
 }
+
+

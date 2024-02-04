@@ -26,6 +26,8 @@ c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h
 c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h
 c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h
 c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h
+c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h
+c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h
 c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h
 c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h
 c++test\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
@@ -41,6 +43,13 @@ c++test\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.
 c++test\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 c++test\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 c++test\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+c++test\main.o: ../Core/Inc/i2c.h
 c++test\main.o: ../Core/Inc/usart.h
 c++test\main.o: ../Core/Inc/gpio.h
-c++test\main.o: ..\User\userMain.h
+c++test\main.o: ../User/comm.h
+c++test\main.o: ../User/userMain.h
+c++test\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+c++test\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+c++test\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+c++test\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cmath
+c++test\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "start.h": "c",
-        "comm.h": "c"
+        "comm.h": "c",
+        "usermain.h": "c",
+        "time_utils.h": "c"
     }
 }
