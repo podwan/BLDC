@@ -21,7 +21,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void printLog()
 {
-  printf("velocity: %.2f, angle: %.2f\n", shaftVelocity, shaftAngle);
+  // printf("velocity: %.2f, angle: %.2f, target: %.2f\n", shaftVelocity, shaftAngle, target);
+
+  printf("electricalAngle: %.2f\n", getElectricalAngle());
 }
 
 // 若使用C库printf需要实现

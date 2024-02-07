@@ -27,5 +27,4 @@ float _normalizeAngle(float angle);
 float SinApprox(float a);
 float CosApprox(float a);
 float SqrtApprox(float value);
-float _electricalAngle(float shaftAngle, int polePairs);
 #endif

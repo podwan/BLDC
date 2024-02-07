@@ -1449,7 +1449,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x64F5EA20)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x64F5EA20)
 F (../Middlewares/ST/ARM/DSP/Lib/arm_cortexM4lf_math.lib)(0x6571CDE3)()
 F (../Middlewares/ST/ARM/DSP/Lib/arm_cortexM4l_math.lib)(0x6571CDE3)()
-F (..\User\foc.c)(0x65C04583)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\foc.o --omf_browse stm32g431cbu6\foc.crf --depend stm32g431cbu6\foc.d)
+F (..\User\foc.c)(0x65C2F822)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\foc.o --omf_browse stm32g431cbu6\foc.crf --depend stm32g431cbu6\foc.d)
 I (..\User\foc.h)(0x65C24136)
 I (..\User\userMain.h)(0x65C04F07)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x64F5EA20)
@@ -1508,7 +1508,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x64F5E
 I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (..\User\bldcMotor.h)(0x65C24141)
-I (..\User\math_utils.h)(0x65C23285)
+I (..\User\math_utils.h)(0x65C24942)
 F (..\User\pid.c)(0x65C0502A)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\pid.o --omf_browse stm32g431cbu6\pid.crf --depend stm32g431cbu6\pid.d)
 I (..\User\pid.h)(0x65C04E9A)
 I (..\User\userMain.h)(0x65C04F07)
@@ -1568,11 +1568,11 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x64F5E
 I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (..\User\time_utils.h)(0x65BA4045)
-I (..\User\math_utils.h)(0x65C23285)
-F (..\User\math_utils.c)(0x65C23285)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\math_utils.o --omf_browse stm32g431cbu6\math_utils.crf --depend stm32g431cbu6\math_utils.d)
+I (..\User\math_utils.h)(0x65C24942)
+F (..\User\math_utils.c)(0x65C24A50)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\math_utils.o --omf_browse stm32g431cbu6\math_utils.crf --depend stm32g431cbu6\math_utils.d)
 I (C:\Keil_v5\ARM\ARMCC\include\cmath)(0x6025237C)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
-I (..\User\math_utils.h)(0x65C23285)
+I (..\User\math_utils.h)(0x65C24942)
 F (..\User\lowPassFilter.c)(0x65C04BBE)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\lowpassfilter.o --omf_browse stm32g431cbu6\lowpassfilter.crf --depend stm32g431cbu6\lowpassfilter.d)
 I (..\User\lowPassFilter.h)(0x65C04F73)
 I (..\User\userMain.h)(0x65C04F07)
@@ -1691,7 +1691,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x64F5E
 I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (../Core/Inc/i2c.h)(0x65AA959D)
-I (..\User\math_utils.h)(0x65C23285)
+I (..\User\math_utils.h)(0x65C24942)
 F (..\User\time_utils.c)(0x65B64D61)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\time_utils.o --omf_browse stm32g431cbu6\time_utils.crf --depend stm32g431cbu6\time_utils.d)
 I (..\User\time_utils.h)(0x65BA4045)
 I (..\User\userMain.h)(0x65C04F07)
@@ -1750,8 +1750,8 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h)(0x64F5EA
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x64F5EA26)
 I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
-F (..\User\sensor.c)(0x65C24136)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\sensor.o --omf_browse stm32g431cbu6\sensor.crf --depend stm32g431cbu6\sensor.d)
-I (..\User\sensor.h)(0x65C24136)
+F (..\User\sensor.c)(0x65C24A3C)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\sensor.o --omf_browse stm32g431cbu6\sensor.crf --depend stm32g431cbu6\sensor.d)
+I (..\User\sensor.h)(0x65C2488B)
 I (..\User\userMain.h)(0x65C04F07)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x64F5EA20)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x65BD1303)
@@ -1810,11 +1810,11 @@ I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (..\User\as5600.h)(0x65BEFCA4)
 I (..\User\bldcMotor.h)(0x65C24141)
-I (..\User\math_utils.h)(0x65C23285)
+I (..\User\math_utils.h)(0x65C24942)
 I (..\User\time_utils.h)(0x65BA4045)
 I (..\User\foc.h)(0x65C24136)
 I (..\User\lowPassFilter.h)(0x65C04F73)
-F (..\User\bldcMotor.c)(0x65C244B0)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\bldcmotor.o --omf_browse stm32g431cbu6\bldcmotor.crf --depend stm32g431cbu6\bldcmotor.d)
+F (..\User\bldcMotor.c)(0x65C2F8DF)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\bldcmotor.o --omf_browse stm32g431cbu6\bldcmotor.crf --depend stm32g431cbu6\bldcmotor.d)
 I (..\User\bldcMotor.h)(0x65C24141)
 I (..\User\userMain.h)(0x65C04F07)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x64F5EA20)
@@ -1874,9 +1874,9 @@ I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (..\User\foc.h)(0x65C24136)
 I (..\User\lowPassFilter.h)(0x65C04F73)
-I (..\User\math_utils.h)(0x65C23285)
+I (..\User\math_utils.h)(0x65C24942)
 I (..\User\pid.h)(0x65C04E9A)
-I (..\User\sensor.h)(0x65C24136)
+I (..\User\sensor.h)(0x65C2488B)
 I (..\User\time_utils.h)(0x65BA4045)
 F (..\User\userMain.c)(0x65C241B1)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\usermain.o --omf_browse stm32g431cbu6\usermain.crf --depend stm32g431cbu6\usermain.d)
 I (..\User\userMain.h)(0x65C04F07)
@@ -1936,7 +1936,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x64F5E
 I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (..\User\bldcMotor.h)(0x65C24141)
-F (..\User\comm.c)(0x65C23DE4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\comm.o --omf_browse stm32g431cbu6\comm.crf --depend stm32g431cbu6\comm.d)
+F (..\User\comm.c)(0x65C2F3C2)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\comm.o --omf_browse stm32g431cbu6\comm.crf --depend stm32g431cbu6\comm.d)
 I (..\User\comm.h)(0x65C0474E)
 I (..\User\userMain.h)(0x65C04F07)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x64F5EA20)
@@ -1996,7 +1996,7 @@ I (../Core/Inc/tim.h)(0x65BA3C58)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 I (../Core/Inc/usart.h)(0x656DD6A4)
 I (..\User\bldcMotor.h)(0x65C24141)
-I (..\User\sensor.h)(0x65C24136)
+I (..\User\sensor.h)(0x65C2488B)
 I (..\User\pid.h)(0x65C04E9A)
 F (../Middlewares/Third_Party/FreeRTOS/Source/croutine.c)(0x64F5EA26)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/ST/ARM/DSP/Inc -I ../MATLAB -I ../User -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_stm32g431cbu6-IC:\Users\18575\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\18575\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx -D__TARGET_FPU_VFP -DARM_MATH_CM4-o stm32g431cbu6\croutine.o --omf_browse stm32g431cbu6\croutine.crf --depend stm32g431cbu6\croutine.d)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h)(0x64F5EA26)

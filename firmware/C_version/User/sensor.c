@@ -228,7 +228,7 @@ bool alignSensor(void)
     {
         setPhaseVoltage(voltageUsedForSensorAlign, 0, _3PI_2); // 计算零点偏移角度
         delay(700);
-        zero_electric_angle = _normalizeAngle(_electricalAngle(countDirection * getAngle(), polePairs));
+        zero_electric_angle = _normalizeAngle(countDirection * getAngle() * polePairs);
         delay(20);
         printf("MOT: Zero elec. angle:");
         printf("%.4f\r\n", zero_electric_angle);

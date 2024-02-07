@@ -140,7 +140,7 @@ void SVPWM(float uAlpha, float uBeta)
 
     PWM_GENERATE(pwm1Duty, pwm2Duty, pwm3Duty);
 }
-#if 1
+#if 0
 void setPhaseVoltage(float Uq, float Ud, float angle_el)
 {
     Uq = CONSTRAINT(Uq, 0, uQ_MAX);

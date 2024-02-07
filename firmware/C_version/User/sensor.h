@@ -43,7 +43,6 @@ float getShaftVelocity(void);
 void MagneticSensor_Init(float zero_electric_offset, Direction _sensor_direction);
 float getAngle(void);
 float getVelocity(void);
-// float getElectricalAngle(void);
 bool alignSensor(void);
 float getShaftAngle(void);
 /******************************************************************************/
